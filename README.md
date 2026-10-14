@@ -39,6 +39,11 @@ Catatan: `build/` dan `AGENTS.md` sengaja tidak di-upload ke GitHub (dokumentasi
 
 ## Konfigurasi Environment
 
+| Variable | Lokasi | Contoh | Keterangan |
+|---|---|---|---|
+| `DATABASE_URL` | `.env` (root atau `backend/`) | `postgresql+psycopg://pintara:***@localhost:5432/pintara` | Koneksi PostgreSQL, dibaca `backend/app/core/config.py` |
+| `VITE_API_BASE_URL` | `frontend/.env` (salinan `.env.example`) | `http://localhost:8000/api/v1` | Base URL API untuk frontend |
+
 - Salin `.env.example` menjadi `.env` (root repo atau `backend/`) lalu isi nilai sesuai lingkungan lokal.
 - File `.env` tidak pernah di-commit (lihat `.gitignore`).
 - Frontend memakai `frontend/.env.example` (dibuat pada TASK-002).
@@ -75,7 +80,26 @@ Prasyarat: PostgreSQL berjalan lokal (port default 5432).
 
 - **Backend** (dari `backend/`, venv aktif): `python -m uvicorn app.main:app --reload` — docs di `http://localhost:8000/docs`.
 - **Frontend** (dari `frontend/`): `npm run dev` — buka `http://localhost:5173`.
-- Panduan lengkap termasuk test akan diperluas pada TASK-005.
+- Dua terminal berjalan bersamaan; base URL frontend menunjuk backend di port `8000`.
+
+## Menjalankan Test
+
+- **Backend** (dari `backend/`, venv aktif):
+
+  ```bash
+  python -m pytest tests -q
+  ```
+
+  Saat ini berisi: health check API dan test koneksi database (butuh PostgreSQL aktif + `.env` terisi).
+
+- **Frontend** (dari `frontend/`) — verifikasi statis tanpa test framework khusus:
+
+  ```bash
+  npx tsc --noEmit   # type check
+  npm run build      # production build
+  ```
+
+- Framework test frontend (mis. Vitest) akan dipertimbangkan pada issue UI berikutnya bila diperlukan.
 
 ## Pengembangan
 
