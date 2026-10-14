@@ -3,6 +3,10 @@
 .env.*
 !.env.example
 
+# Dokumentasi lokal (hanya di VS Code, jangan di-upload)
+build/
+AGENTS.md
+
 # Python
 .venv/
 venv/
