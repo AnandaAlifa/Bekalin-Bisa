@@ -1,0 +1,31 @@
+.lesson-panel {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.lesson-panel__content {
+  white-space: pre-wrap;
+  font-size: 1.05rem;
+  max-width: 65ch;
+}
+
+.lesson-panel__note {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-lavender);
+  border-left: 4px solid var(--color-purple-soft);
+}
+
+.lesson-panel__note-title {
+  margin: 0 0 var(--space-1);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: var(--color-purple);
+}
+
+.lesson-panel__note p {
+  margin: 0;
+}

@@ -1,0 +1,50 @@
+.chapter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.chapter-item {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.chapter-item__title {
+  margin: 0 0 var(--space-2);
+  font-size: 1.1rem;
+}
+
+.chapter-item__lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.lesson-link {
+  display: block;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-lavender);
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.lesson-link:hover,
+.lesson-link:focus-visible {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.lesson-link:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
