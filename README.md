@@ -73,7 +73,13 @@ Prasyarat: PostgreSQL berjalan lokal (port default 5432).
    .venv/Scripts/python.exe -m alembic upgrade head
    ```
 
-5. Uji koneksi database: jalankan `python -m pytest tests -q` dari `backend/` — test `test_db_connection` memverifikasi koneksi.
+5. Isi data materi contoh (idempoten, dilewati bila data sudah ada):
+
+   ```bash
+   .venv/Scripts/python.exe -m app.db.seed
+   ```
+
+6. Uji koneksi database: jalankan `python -m pytest tests -q` dari `backend/` — test `test_db_connection` memverifikasi koneksi.
 
 ## Menjalankan Aplikasi
 
