@@ -23,19 +23,45 @@ export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> 
   }
 
   if (!response.ok) {
-    let detail = `Permintaan gagal (HTTP ${response.status}).`;
-    try {
-      const body = (await response.json()) as { detail?: unknown };
-      if (body && typeof body.detail === 'string' && body.detail) {
-        detail = body.detail;
-      }
-    } catch {
-      // respons bukan JSON — pakai pesan default
-    }
-    throw new ApiError(response.status, detail);
+    throw await toApiError(response);
   }
 
   return (await response.json()) as T;
+}
+
+export async function apiPost<T>(path: string, body: unknown): Promise<T> {
+  let response: Response;
+  try {
+    response = await fetch(`${apiBaseUrl}${path}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new ApiError(0, 'Tidak dapat terhubung ke server. Pastikan backend berjalan.');
+  }
+
+  if (!response.ok) {
+    throw await toApiError(response);
+  }
+
+  return (await response.json()) as T;
+}
+
+async function toApiError(response: Response): Promise<ApiError> {
+  let detail = `Permintaan gagal (HTTP ${response.status}).`;
+  try {
+    const body = (await response.json()) as { detail?: unknown };
+    if (body && typeof body.detail === 'string' && body.detail) {
+      detail = body.detail;
+    }
+  } catch {
+    // respons bukan JSON — pakai pesan default
+  }
+  return new ApiError(response.status, detail);
 }
 
 export function getHealth(signal?: AbortSignal): Promise<{ status: string }> {

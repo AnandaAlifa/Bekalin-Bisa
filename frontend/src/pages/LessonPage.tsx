@@ -62,6 +62,11 @@ export default function LessonPage() {
                 <p>{lesson.note}</p>
               </aside>
             )}
+            <p className="lesson-panel__practice">
+              <Link className="button button--primary" to={`/lessons/${lesson.id}/practice`}>
+                Mulai Latihan
+              </Link>
+            </p>
           </article>
         )}
       </StatusView>

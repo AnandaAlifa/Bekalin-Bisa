@@ -29,3 +29,7 @@
 .lesson-panel__note p {
   margin: 0;
 }
+
+.lesson-panel__practice {
+  margin: var(--space-3) 0 0;
+}

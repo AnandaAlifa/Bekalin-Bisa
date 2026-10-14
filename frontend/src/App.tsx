@@ -2,6 +2,7 @@ import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import SubjectsPage from './pages/SubjectsPage';
 import ChaptersPage from './pages/ChaptersPage';
 import LessonPage from './pages/LessonPage';
+import PracticePage from './pages/PracticePage';
 import './App.css';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/subjects" element={<SubjectsPage />} />
             <Route path="/subjects/:subjectId" element={<ChaptersPage />} />
             <Route path="/lessons/:lessonId" element={<LessonPage />} />
+            <Route path="/lessons/:lessonId/practice" element={<PracticePage />} />
             <Route
               path="*"
               element={
