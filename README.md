@@ -87,6 +87,20 @@ Prasyarat: PostgreSQL berjalan lokal (port default 5432).
 - **Frontend** (dari `frontend/`): `npm run dev` — buka `http://localhost:5173`.
 - Dua terminal berjalan bersamaan; base URL frontend menunjuk backend di port `8000`.
 
+## API Endpoints (Prefix `/api/v1`)
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/health` | Health check |
+| GET | `/subjects` | Daftar mata pelajaran |
+| GET | `/subjects/{subject_id}/chapters` | Daftar bab |
+| GET | `/chapters/{chapter_id}/lessons` | Daftar subbab |
+| GET | `/lessons/{lesson_id}` | Detail materi |
+| GET | `/lessons/{lesson_id}/questions` | Daftar soal pilihan ganda **tanpa kunci jawaban** |
+| POST | `/lessons/{lesson_id}/attempts` | Submit jawaban; backend menghitung & menyimpan skor |
+
+Catatan penilaian (spec §PRC-002): skor dihitung di backend (`benar / total × 100`, dibulatkan). Kunci jawaban (`correct_option`) dan `explanation` hanya dikirim pada respons submit, bukan pada daftar soal.
+
 ## Menjalankan Test
 
 - **Backend** (dari `backend/`, venv aktif):
@@ -95,7 +109,7 @@ Prasyarat: PostgreSQL berjalan lokal (port default 5432).
   python -m pytest tests -q
   ```
 
-  Saat ini berisi: health check API dan test koneksi database (butuh PostgreSQL aktif + `.env` terisi).
+  Saat ini berisi: health check, koneksi database, CORS, model & API materi, serta model & API latihan (butuh PostgreSQL aktif + `.env` terisi).
 
 - **Frontend** (dari `frontend/`) — verifikasi statis tanpa test framework khusus:
 
