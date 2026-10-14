@@ -40,6 +40,7 @@ Manuk_Emprit/
 | Variable | Lokasi | Contoh | Keterangan |
 |---|---|---|---|
 | `DATABASE_URL` | `.env` (root atau `backend/`) | `postgresql+psycopg://pintara:***@localhost:5432/pintara` | Koneksi PostgreSQL, dibaca `backend/app/core/config.py` |
+| `CORS_ORIGINS` | `.env` (opsional) | `http://localhost:5173,http://127.0.0.1:5173` | Origin frontend yang diizinkan CORS (default sudah sesuai Vite dev) |
 | `VITE_API_BASE_URL` | `frontend/.env` (salinan `.env.example`) | `http://localhost:8000/api/v1` | Base URL API untuk frontend |
 
 - Salin `.env.example` menjadi `.env` (root repo atau `backend/`) lalu isi nilai sesuai lingkungan lokal.
