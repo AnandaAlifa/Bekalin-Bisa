@@ -48,7 +48,7 @@ Manuk_Emprit/
 Pekerjaan dikelola lewat [GitHub Issues](https://github.com/AnandaAlifa/Pintara/issues). Setiap issue mengikuti alur: implementasi → verifikasi → commit → push → update issue.
 
 ## Owner
-Ananda Alifa
-Gozali Gazza
-Alifah
-Muhammad Aryosa
+Ananda Alifa,
+Gozali Gazza,
+Alifah,
+Muhammad Aryosa.
