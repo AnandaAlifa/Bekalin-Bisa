@@ -6,7 +6,7 @@ Platform pembelajaran: materi berdasarkan mata pelajaran, bab, dan subbab, serta
 
 ## Status
 
-Proyek dalam pengembangan. Backlog dan urutan pengerjaan ada di `build/task.md` (lokal saja, tidak di-upload ke GitHub); spesifikasi di `build/spec.md`; desain UI di `build/design.md`.
+Proyek dalam pengembangan. Backlog dan urutan pengerjaan ada di `build/task.md`; spesifikasi di `build/spec.md`; desain UI di `build/design.md`; aturan engineering di `AGENTS.md`.
 
 ## Tech Stack
 
@@ -26,16 +26,14 @@ Manuk_Emprit/
 ├── frontend/          # Aplikasi React (TASK-002)
 ├── backend/           # Aplikasi FastAPI (TASK-003)
 ├── build/
-│   ├── spec.md        # Kebutuhan produk dan acceptance criteria (lokal saja)
-│   ├── design.md      # Spesifikasi UI/UX dan responsive design (lokal saja)
-│   ├── task.md        # Backlog, dependensi, urutan implementasi (lokal saja)
-│   └── issues/        # Draft isi setiap GitHub issue (lokal saja)
+│   ├── spec.md        # Kebutuhan produk dan acceptance criteria
+│   ├── design.md      # Spesifikasi UI/UX dan responsive design
+│   └── task.md        # Backlog, dependensi, urutan implementasi
+├── AGENTS.md          # Aturan engineering dan workflow proyek
 ├── .env.example       # Contoh konfigurasi environment
 ├── .gitignore
 └── README.md
 ```
-
-Catatan: `build/` dan `AGENTS.md` sengaja tidak di-upload ke GitHub (dokumentasi kerja lokal).
 
 ## Konfigurasi Environment
 
