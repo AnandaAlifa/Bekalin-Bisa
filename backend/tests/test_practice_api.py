@@ -217,19 +217,26 @@ def test_submit_unpublished_question_rejected() -> None:
         session.commit()
         hidden_id = hidden.id
 
-    response = client.post(
-        f"/api/v1/lessons/{lesson_id}/attempts",
-        json={
-            "answers": [
-                {"question_id": q["id"], "selected_option": q["correct_option"]}
-                for q in questions
-            ]
-            + [{"question_id": hidden_id, "selected_option": "A"}]
-        },
-    )
+    try:
+        response = client.post(
+            f"/api/v1/lessons/{lesson_id}/attempts",
+            json={
+                "answers": [
+                    {"question_id": q["id"], "selected_option": q["correct_option"]}
+                    for q in questions
+                ]
+                + [{"question_id": hidden_id, "selected_option": "A"}]
+            },
+        )
 
-    assert response.status_code == 400
-    assert "bukan bagian dari latihan" in response.json()["detail"]
+        assert response.status_code == 400
+        assert "bukan bagian dari latihan" in response.json()["detail"]
+    finally:
+        with SessionLocal() as session:
+            leftover = session.get(Question, hidden_id)
+            if leftover is not None:
+                session.delete(leftover)
+                session.commit()
 
 
 def test_submit_lesson_not_found() -> None:
