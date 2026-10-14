@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
-from app.models import Chapter, Lesson, Subject
+from app.models import Chapter, Lesson, Question, Subject
 
 SEED_SUBJECTS = [
     {
@@ -105,6 +105,42 @@ SEED_SUBJECTS = [
 ]
 
 
+SEED_QUESTIONS = {
+    "Pengenalan Bilangan Bulat": [
+        {
+            "question_text": "Manakah bilangan yang merupakan bilangan bulat negatif?",
+            "options": ["3", "-2", "0", "1/2"],
+            "correct_option": "B",
+            "explanation": "Bilangan bulat negatif diawali tanda minus, misalnya -2.",
+        },
+        {
+            "question_text": "Pada garis bilangan, bilangan mana yang paling kecil?",
+            "options": ["-5", "-1", "0", "2"],
+            "correct_option": "A",
+            "explanation": "Makin ke kiri pada garis bilangan, nilainya semakin kecil.",
+        },
+        {
+            "question_text": "Hasil dari (-3) + 5 adalah…",
+            "options": ["-8", "-2", "2", "8"],
+            "correct_option": "C",
+            "explanation": "Beda tanda: 5 - 3 = 2 dengan tanda dari bilangan absolutnya lebih besar, yaitu positif.",
+        },
+        {
+            "question_text": "Hasil dari (-4) - (-1) adalah…",
+            "options": ["-5", "-3", "3", "5"],
+            "correct_option": "B",
+            "explanation": "Mengurang bilangan negatif seperti menambah: -4 + 1 = -3.",
+        },
+        {
+            "question_text": "Manakah yang BUKAN bilangan bulat?",
+            "options": ["-10", "0", "7", "2/3"],
+            "correct_option": "D",
+            "explanation": "2/3 adalah pecahan, bukan bilangan bulat.",
+        },
+    ],
+}
+
+
 def seed_learning_content(session: Session) -> int:
     """Isi data materi contoh jika tabel masih kosong. Idempoten."""
     existing = session.scalar(select(Subject.id).limit(1))
@@ -140,6 +176,33 @@ def seed_learning_content(session: Session) -> int:
     return len(SEED_SUBJECTS)
 
 
+def seed_practice_questions(session: Session) -> int:
+    """Isi soal latihan contoh untuk materi tertentu. Idempoten."""
+    existing = session.scalar(select(Question.id).limit(1))
+    if existing is not None:
+        return 0
+
+    total = 0
+    for lesson_title, questions in SEED_QUESTIONS.items():
+        lesson = session.scalar(select(Lesson).where(Lesson.title == lesson_title))
+        if lesson is None:
+            continue
+        for item in questions:
+            session.add(
+                Question(
+                    lesson_id=lesson.id,
+                    question_text=item["question_text"],
+                    options=item["options"],
+                    correct_option=item["correct_option"],
+                    explanation=item["explanation"],
+                    is_published=True,
+                )
+            )
+            total += 1
+    session.commit()
+    return total
+
+
 def main() -> None:
     with SessionLocal() as session:
         added = seed_learning_content(session)
@@ -147,6 +210,11 @@ def main() -> None:
             print(f"Seed selesai: {added} mata pelajaran ditambahkan.")
         else:
             print("Seed dilewati: data mata pelajaran sudah ada.")
+        questions = seed_practice_questions(session)
+        if questions:
+            print(f"Seed soal selesai: {questions} soal ditambahkan.")
+        else:
+            print("Seed soal dilewati: data soal sudah ada.")
 
 
 if __name__ == "__main__":
