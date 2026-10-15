@@ -1,4 +1,4 @@
-# BEKALIN BISA
+# BEKALIN BISA by Manuk Emprit Team
 
 > **Belajar, Bertumbuh, Berprestasi** — platform pembelajaran digital dengan materi terstruktur, latihan soal berskor backend, lab simulasi, ujian ber-mode terkunci, jadwal, konsultasi, dan panel guru/admin.
 
