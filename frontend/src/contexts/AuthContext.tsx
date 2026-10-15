@@ -1,5 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { ApiError } from '../services/api';
+import {
+  apiCurrentUser,
+  apiLogout,
+  clearAccessToken,
+  getAccessToken,
+} from '../services/auth';
 import type { BackendAuthUser } from '../services/auth';
 
 export type UserRole = 'student' | 'teacher' | 'school_admin';
@@ -107,10 +114,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const loginWithBackendUser = useCallback(
+    (backendUser: BackendAuthUser, extras?: { name?: string; className?: string }) => {
+      setUser({
+        email: backendUser.email,
+        name: extras?.name?.trim() || backendUser.username,
+        username: backendUser.username,
+        role: backendUser.role === 'admin' ? 'school_admin' : 'student',
+        schoolName: 'Sekolah',
+        className: extras?.className ?? 'Kelas 11 IPA',
+        sourceMode: 'COMPANY_PLUS_SCHOOL',
+        bio: backendUser.bio ?? '',
+      });
+    },
+    [],
+  );
+
   useEffect(() => {
-    setUser(loadStoredUser());
-    setIsLoading(false);
-  }, []);
+    let cancelled = false;
+
+    async function initialize() {
+      const token = getAccessToken();
+      if (token) {
+        try {
+          const backendUser = await apiCurrentUser(token);
+          if (!cancelled) {
+            loginWithBackendUser(backendUser);
+          }
+          return;
+        } catch (err) {
+          if (err instanceof ApiError && err.status === 401) {
+            clearAccessToken();
+          }
+          // error koneksi (status 0) mempertahankan sesi localStorage sebagai fallback
+        }
+      }
+      if (!cancelled) {
+        setUser(loadStoredUser());
+      }
+    }
+
+    void initialize().finally(() => {
+      if (!cancelled) setIsLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [loginWithBackendUser]);
 
   useEffect(() => {
     if (user) {
@@ -143,23 +193,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return false;
   }, []);
 
-  const loginWithBackendUser = useCallback(
-    (backendUser: BackendAuthUser, extras?: { name?: string; className?: string }) => {
-      setUser({
-        email: backendUser.email,
-        name: extras?.name?.trim() || backendUser.username,
-        username: backendUser.username,
-        role: backendUser.role === 'admin' ? 'school_admin' : 'student',
-        schoolName: 'Sekolah',
-        className: extras?.className ?? 'Kelas 11 IPA',
-        sourceMode: 'COMPANY_PLUS_SCHOOL',
-        bio: backendUser.bio ?? '',
-      });
-    },
-    [],
-  );
-
   const logout = useCallback(() => {
+    clearAccessToken();
+    void apiLogout().catch(() => {
+      /* logout stateless — abaikan kegagalan jaringan */
+    });
     setUser(null);
   }, []);
 

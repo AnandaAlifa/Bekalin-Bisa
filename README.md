@@ -53,7 +53,7 @@ Berikut fitur yang **sudah berjalan** di kode saat ini:
 
 - **Design system** — palet Indigo/Pink/Slate, font Inter, `.bekalin-box` / `.bekalin-button`, animasi cinematic (fade-in, pop-in, slide) + dukungan `prefers-reduced-motion`.
 - **Layout responsif** — desktop: sidebar + header sticky; mobile: bottom nav 5 item + bottom sheet **Lainnya**.
-- **Auth screens** — Login & Sign Up terhubung backend (`/auth/login`, `/auth/register`) dengan state loading, error validasi/authentikasi, dan toggle tampil sandi; Lupa Kata Sandi masih placeholder. Integrasi sesi penuh (token-based state) menyusul di AUTH-006.
+- **Auth screens** — Login & Sign Up terhubung backend (`/auth/login`, `/auth/register`) dengan state loading, error validasi/authentikasi, dan toggle tampil sandi; sesi token-based terintegrasi penuh (hydrasi `/users/me`, proteksi route, logout); Lupa Kata Sandi masih placeholder.
 - **Materi** — grid mata pelajaran dengan icon & kategori, selector kelas, integrasi backend API; halaman detail bab + catatan pribadi (localStorage).
 - **Lab (Praktikin)** — 4 tab simulasi (Fisika, Biologi, Kimia, Astronomi) dengan panel gelap, slider parameter, dan tombol simpan.
 - **Ujian** — daftar ujian, mode ujian aktif (timer + radio jawaban), dan **exam lockdown** (deteksi blur/visibilitychange → overlay blokir).
@@ -72,7 +72,7 @@ Berikut fitur yang **sudah berjalan** di kode saat ini:
 │  :5173           │ ◄─────────────────── │  :8000 /api/v1   │ ◄──────────── │ :5432      │
 └──────────────────┘                      └──────────────────┘               └────────────┘
    SPA + Router                              Routers → Services →
-   Auth demo (localStorage)                  Models (SQLAlchemy) /
+   Auth JWT (sessionStorage + /users/me)     Models (SQLAlchemy) /
    Semua tab UI                              Auth backend: JWT HS256 + bcrypt
                                              Skor latihan dihitung di sini
 ```
@@ -256,7 +256,7 @@ Content-Type: application/json
 
 ## Autentikasi (Saat Ini)
 
-> **Status:** autentikasi **backend lengkap** untuk MVP (`/auth/register`, `/auth/login`, `/auth/logout`, `/users/me` — JWT HS256 + bcrypt). **Form login & signup frontend sudah mengirim ke endpoint backend** (AUTH-005); setelah login berhasil token disimpan di `sessionStorage` dan sesi di-bridge ke `AuthContext`. Sesi token-based penuh (hydrasi `/users/me` saat refresh, proteksi route, logout terintegrasi) dikerjakan di issue [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
+> **Status:** autentikasi **sudah terintegrasi penuh** untuk MVP — backend lengkap (`/auth/register`, `/auth/login`, `/auth/logout`, `/users/me`, JWT HS256 + bcrypt) dan frontend menyimpan token di `sessionStorage`, menghydrasi sesi via `GET /users/me` saat refresh, melindungi route (`RequireAuth`), dan melakukan logout bersih (hapus token + panggil `/auth/logout`). Akun demo lama tetap didukung sebagai fallback client-side. Sisa pekerjaan: issue [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) (AUTH-007, test keamanan & E2E).
 >
 > Rincian keputusan arsitektur: [`build/auth-architecture.md`](build/auth-architecture.md) (ADR-001).
 
@@ -273,9 +273,11 @@ Anda juga dapat mendaftar akun baru melalui **Sign Up** — untuk sementara akun
 ### Perilaku saat ini
 
 - Form login mengirim ke `POST /auth/login`; form signup mengirim ke `POST /auth/register` (role selalu `student` di backend).
-- Setelah login backend berhasil, token disimpan di `sessionStorage` dan profil user di-bridge ke `AuthContext` (demo `localStorage` masih dipertahankan untuk akun demo sampai AUTH-006).
-- Route terlindungi diarahkan ke `/login` oleh guard di `App.tsx` (client-side saja).
-- Backend memverifikasi kredensial dan token secara independen (`GET /users/me` menolak tanpa Bearer token yang valid).
+- Sesi disimpan sebagai JWT di `sessionStorage`; saat bootstrap/refresh, `AuthContext` memverifikasi token lewat `GET /users/me` (401 → bersihkan sesi).
+- Route terlindungi diarahkan ke `/login` oleh guard `RequireAuth` di `App.tsx` (client-side saja) dan kembali ke halaman awal setelah login.
+- Logout (sidebar & menu mobile) menghapus token, memanggil `POST /auth/logout`, dan mereset state UI.
+- Akun demo lama (localStorage) tetap didukung sebagai fallback sampai dihapus pada iterasi berikutnya.
+- Backend memverifikasi kredensial dan token secara independen (`GET /users/me` menolak tanpa Bearer token yang valid) — guard frontend bukan satu-satunya kontrol.
 - Role frontend (`student` / `teacher` / `school_admin`) mempengaruhi menu sidebar & bottom sheet; role backend saat ini `student` / `admin` dan **otorisasi per-role belum diterapkan** di endpoint (lihat ADR §8).
 - Menyembunyikan menu admin di frontend **bukan** pengganti otorisasi backend.
 
@@ -343,14 +345,13 @@ Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Com
 
 ### Issue terbuka yang direkomendasikan berikutnya
 
-Integrasi sesi frontend (dependensi satu sama lain, kerjakan berurutan):
+Sisa pekerjaan autentikasi:
 
 | Issue | Task | Judul |
 |---|---|---|
-| [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) | AUTH-006 | Integrate Authentication State and Route Protection |
 | [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
 
-(AUTH-001–005 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
+(AUTH-001–006 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
 
 ## Tim
 

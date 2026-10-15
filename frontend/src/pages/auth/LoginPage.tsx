@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
 import { ApiError } from '../../services/api';
@@ -10,12 +10,18 @@ export default function LoginPage() {
   const { user, login, loginWithBackendUser } = useAuth();
   const { showNotification } = useNotification();
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (user) return <Navigate to="/" replace />;
+  const redirectTo = (): string => {
+    const from = (location.state as { from?: string } | null)?.from;
+    return from && from !== '/login' ? from : '/';
+  };
+
+  if (user) return <Navigate to={redirectTo()} replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +35,10 @@ export default function LoginPage() {
       const result = await apiLogin(email.trim(), pass);
       saveAccessToken(result.access_token);
       loginWithBackendUser(result.user);
-      navigate('/');
+      navigate(redirectTo(), { replace: true });
     } catch (err) {
       if (err instanceof ApiError && err.status === 401 && login(email.trim(), pass)) {
-        navigate('/');
+        navigate(redirectTo(), { replace: true });
         return;
       }
       const message =

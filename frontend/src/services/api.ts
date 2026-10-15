@@ -10,12 +10,20 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+export async function apiGet<T>(
+  path: string,
+  signal?: AbortSignal,
+  token?: string,
+): Promise<T> {
   let response: Response;
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
   try {
     response = await fetch(`${apiBaseUrl}${path}`, {
       method: 'GET',
-      headers: { Accept: 'application/json' },
+      headers,
       signal,
     });
   } catch {

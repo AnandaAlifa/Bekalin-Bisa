@@ -1,4 +1,4 @@
-import { apiPost } from './api';
+import { apiGet, apiPost } from './api';
 
 const TOKEN_KEY = 'bekalin.auth.token';
 
@@ -29,6 +29,14 @@ export function apiRegister(input: RegisterInput): Promise<BackendAuthUser> {
 
 export function apiLogin(email: string, password: string): Promise<LoginResponse> {
   return apiPost<LoginResponse>('/auth/login', { email, password });
+}
+
+export function apiCurrentUser(token: string): Promise<BackendAuthUser> {
+  return apiGet<BackendAuthUser>('/users/me', undefined, token);
+}
+
+export function apiLogout(): Promise<{ detail: string }> {
+  return apiPost<{ detail: string }>('/auth/logout', {});
 }
 
 export function saveAccessToken(token: string): void {
