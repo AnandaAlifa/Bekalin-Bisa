@@ -281,6 +281,16 @@ Anda juga dapat mendaftar akun baru melalui **Sign Up** — untuk sementara akun
 - Role frontend (`student` / `teacher` / `school_admin`) mempengaruhi menu sidebar & bottom sheet; role backend saat ini `student` / `admin` dan **otorisasi per-role belum diterapkan** di endpoint (lihat ADR §8).
 - Menyembunyikan menu admin di frontend **bukan** pengganti otorisasi backend.
 
+### Limitasi Autentikasi (terdokumentasi)
+
+- **Logout stateless** — tidak ada invalidasi token server-side pada MVP; token yang sudah terbit tetap berlaku sampai kedaluarsa (lihat ADR §8). Logout FE menghapus token + memanggil `/auth/logout` untuk kompatibilitas.
+- **Tanpa refresh token** — access token 60 menit (`ACCESS_TOKEN_EXPIRE_MINUTES`); setelah kedaluarsa, pengguna harus login ulang.
+- **Rate limiting belum diterapkan** pada endpoint login (opsional, dapat ditambahkan bila diperlukan).
+- **Role backend** baru `student` / `admin` (input klien dipaksa `student` saat registrasi); otorisasi per-role pada endpoint & role `teacher`/`school_admin` menyusul.
+- **Akun demo lama** masih didukung fallback `localStorage` (tanpa token) — akan dibersihkan pada iterasi berikutnya.
+- **Profil** yang diedit via halaman Profil disimpan lokal; `PATCH /users/me` (P2) belum diimplementasikan.
+- **Lupa Kata Sandi** masih placeholder (tidak ada alur reset password di backend).
+
 ## Pengujian
 
 **Backend** (butuh PostgreSQL aktif + `.env` terisi):
@@ -290,7 +300,7 @@ cd backend
 python -m pytest tests -q
 ```
 
-Cakupan: health check, koneksi DB, CORS, model & API materi, model & API latihan (validasi, penilaian, edge case), serta alur integrasi end-to-end materi → latihan → hasil.
+Cakupan: health check, koneksi DB, CORS, model & API materi, model & API latihan (validasi, penilaian, edge case), alur integrasi end-to-end materi → latihan → hasil, serta autentikasi penuh: model user, registrasi, login & sesi JWT, proteksi `/users/me`, dan lifecycle E2E (register → login → akses terlindungi → logout; hashing bcrypt dengan salt unik; klaim token; state error; tanpa kebocoran secret di respons).
 
 **Frontend** (verifikasi statis):
 
@@ -345,13 +355,7 @@ Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Com
 
 ### Issue terbuka yang direkomendasikan berikutnya
 
-Sisa pekerjaan autentikasi:
-
-| Issue | Task | Judul |
-|---|---|---|
-| [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
-
-(AUTH-001–006 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
+Fase autentikasi (**AUTH-001–007**, issue [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32)) **selesai seluruhnya** — lihat [`build/auth-architecture.md`](build/auth-architecture.md) (ADR-001) dan bagian [Limitasi Autentikasi](#limitasi-autentikasi-terdokumentasi). Backlog berikutnya mengikuti [`build/task.md`](build/task.md) dan issue terbuka di repositori.
 
 ## Tim
 
