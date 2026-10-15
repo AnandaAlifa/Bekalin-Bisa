@@ -283,7 +283,7 @@ Strategi: **JWT Bearer (HS256)** + **bcrypt**, stateless, access token 60 menit.
 
 | Role | Email | Password |
 |---|---|---|
-| Teacher | `teacher@school.sch.id` | `guru123` |
+| Teacher | `teacher@school.sch.id` | `guru1234` |
 | School admin | `admin@school.sch.id` | `admin123` |
 
 Akun **school_admin** dapat mencoba `POST /api/v1/admin/users` dan `PATCH /api/v1/admin/lessons/{id}` di Swagger. Student demo (`budi@student.sch.id` / `siswa123`) dan akun localStorage lama (`guru@`, `admin@`) masih didukung fallback client-side.

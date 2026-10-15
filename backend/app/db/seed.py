@@ -207,7 +207,7 @@ def seed_practice_questions(session: Session) -> int:
 DEMO_ACCOUNTS = [
     {
         "email": "teacher@school.sch.id",
-        "password": "guru123",
+        "password": "guru1234",
         "username": "guru-demo",
         "role": "teacher",
     },
