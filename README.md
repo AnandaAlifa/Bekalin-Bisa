@@ -175,7 +175,7 @@ Buka [`http://localhost:5173`](http://localhost:5173) — halaman Login tampil s
 
 ### 6. Coba alurnya
 
-1. Login dengan akun demo (lihat [Autentikasi](#autentikasi-saat-ini)).
+1. Login dengan akun demo (lihat [Autentikasi](#autentikasi-saat-ini)) atau melakukan sign up.
 2. Setelah masuk: **Materi** → *Matematika* → bab → materi **Pengenalan Bilangan Bulat**.
 3. Klik **Mulai Latihan**, kerjakan 5 soal, lalu **Kirim jawaban**.
 4. Periksa hasil: skor dari backend, penjelasan per soal, dan tombol **Kerjakan ulang**.
