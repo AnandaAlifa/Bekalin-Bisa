@@ -53,7 +53,7 @@ Berikut fitur yang **sudah berjalan** di kode saat ini:
 
 - **Design system** — palet Indigo/Pink/Slate, font Inter, `.bekalin-box` / `.bekalin-button`, animasi cinematic (fade-in, pop-in, slide) + dukungan `prefers-reduced-motion`.
 - **Layout responsif** — desktop: sidebar + header sticky; mobile: bottom nav 5 item + bottom sheet **Lainnya**.
-- **Auth screens (client-side demo)** — Login, Sign Up (validasi emoji), Lupa Kata Sandi. State disimpan di `localStorage`; **bukan** autentikasi backend.
+- **Auth screens (client-side demo)** — Login, Sign Up (validasi emoji), Lupa Kata Sandi. State disimpan di `localStorage`; **bukan** autentikasi backend (integrasi ke endpoint `/auth/*` dikerjakan di AUTH-005/006).
 - **Materi** — grid mata pelajaran dengan icon & kategori, selector kelas, integrasi backend API; halaman detail bab + catatan pribadi (localStorage).
 - **Lab (Praktikin)** — 4 tab simulasi (Fisika, Biologi, Kimia, Astronomi) dengan panel gelap, slider parameter, dan tombol simpan.
 - **Ujian** — daftar ujian, mode ujian aktif (timer + radio jawaban), dan **exam lockdown** (deteksi blur/visibilitychange → overlay blokir).
@@ -73,7 +73,8 @@ Berikut fitur yang **sudah berjalan** di kode saat ini:
 └──────────────────┘                      └──────────────────┘               └────────────┘
    SPA + Router                              Routers → Services →
    Auth demo (localStorage)                  Models (SQLAlchemy) /
-   Semua tab UI                              Skor latihan dihitung di sini
+   Semua tab UI                              Auth backend: JWT HS256 + bcrypt
+                                             Skor latihan dihitung di sini
 ```
 
 Alur pengguna utama (materi → latihan → hasil):
@@ -138,7 +139,7 @@ cp .env.example .env
 cp frontend/.env.example frontend/.env   # opsional; default sudah menunjuk localhost:8000
 ```
 
-Isi `DATABASE_URL` di `.env` sesuai kredensial PostgreSQL lokal Anda. Detail di [Konfigurasi](#konfigurasi). File `.env` tidak boleh di-commit.
+Isi `DATABASE_URL` dan `SECRET_KEY` di `.env` sesuai lingkungan lokal Anda (lihat [Konfigurasi](#konfigurasi)). File `.env` tidak boleh di-commit.
 
 ### 3. Database
 
@@ -187,6 +188,8 @@ Buka [`http://localhost:5173`](http://localhost:5173) — halaman Login tampil s
 |---|---|---|---|
 | `DATABASE_URL` | `.env` (root atau `backend/`) | `postgresql+psycopg://pintara:***@localhost:5432/pintara` | Koneksi PostgreSQL; dibaca `backend/app/core/config.py` (pydantic-settings) |
 | `CORS_ORIGINS` | `.env` (opsional) | `http://localhost:5173,http://127.0.0.1:5173` | Origin yang diizinkan CORS |
+| `SECRET_KEY` | `.env` (wajib) | 64 karakter hex acak | Kunci HMAC JWT HS256 (AUTH-004); buat dengan `python -c "import secrets; print(secrets.token_hex(32))"` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | `.env` (opsional) | `60` | Masa berlaku access token dalam menit |
 | `VITE_API_BASE_URL` | `frontend/.env` | `http://localhost:8000/api/v1` | Base URL API untuk frontend |
 
 Backend membaca `.env` dari folder `backend/` atau root repo. Jangan pernah menaruh kredensial nyata di `.env.example`.
@@ -221,6 +224,9 @@ Base URL: `http://localhost:8000/api/v1` — Swagger UI lengkap di [`/docs`](htt
 |---|---|---|
 | GET | `/health` | Health check |
 | POST | `/auth/register` | Pendaftaran akun (201; role selalu `student`; duplikat email → 409) |
+| POST | `/auth/login` | Login (200 `{access_token, token_type, expires_in, user}`; kredensial salah → 401 generik) |
+| POST | `/auth/logout` | Logout kompatibilitas (stateless; FE menghapus token) |
+| GET | `/users/me` | Profil pengguna aktif — terlindungi `Authorization: Bearer <token>` |
 | GET | `/subjects` | Daftar mata pelajaran terpublikasi |
 | GET | `/subjects/{subject_id}/chapters` | Daftar bab per mata pelajaran |
 | GET | `/chapters/{chapter_id}/lessons` | Daftar subbab per bab |
@@ -250,9 +256,11 @@ Content-Type: application/json
 
 ## Autentikasi (Saat Ini)
 
-> **Penting:** autentikasi saat ini **hanya client-side demo** di `AuthContext` (React + `localStorage`). Endpoint `POST /auth/register` (AUTH-003, issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)) dan tabel `users` sudah ada di backend, tetapi endpoint `/auth/login`, verifikasi kredensial, dan sesi/token server-side **belum ada**. Sisa autentikasi backend masih dikerjakan di issue [#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
+> **Status:** autentikasi **backend sudah lengkap** untuk MVP — `POST /auth/register`, `POST /auth/login` (JWT HS256, bcrypt, expiry 60 menit), `POST /auth/logout`, dan `GET /users/me` (terlindungi Bearer token). **Frontend masih memakai demo client-side** (`AuthContext` + `localStorage`) dan belum terhubung ke endpoint tersebut — pengerjaan integrasi FE di issue [#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
+>
+> Rincian keputusan arsitektur: [`build/auth-architecture.md`](build/auth-architecture.md) (ADR-001).
 
-### Akun demo
+### Akun demo (frontend, localStorage)
 
 | Role | Email | Password |
 |---|---|---|
@@ -260,13 +268,14 @@ Content-Type: application/json
 | Guru | `guru@school.sch.id` | `guru123` |
 | Admin sekolah | `admin@school.sch.id` | `admin123` |
 
-Anda juga dapat mendaftar akun baru melalui **Sign Up** — akun disimpan di `localStorage` browser masing-masing.
+Anda juga dapat mendaftar akun baru melalui **Sign Up** — untuk sementara akun disimpan di `localStorage` browser masing-masing sampai integrasi AUTH-005/006 selesai. Registrasi backend (email apa pun, role `student`) dapat dicoba langsung via `POST /api/v1/auth/register`.
 
 ### Perilaku saat ini
 
-- Login/signup/logout ditangani `frontend/src/contexts/AuthContext.tsx`.
+- Login/signup/logout frontend ditangani `frontend/src/contexts/AuthContext.tsx` (demo `localStorage`).
 - Route terlindungi diarahkan ke `/login` oleh guard di `App.tsx` (client-side saja).
-- Role (`student` / `teacher` / `school_admin`) mempengaruhi menu sidebar & bottom sheet, **tetapi tidak diamankan di backend**.
+- Backend memverifikasi kredensial dan token secara independen (`GET /users/me` menolak tanpa Bearer token yang valid).
+- Role frontend (`student` / `teacher` / `school_admin`) mempengaruhi menu sidebar & bottom sheet; role backend saat ini `student` / `admin` dan **otorisasi per-role belum diterapkan** di endpoint (lihat ADR §8).
 - Menyembunyikan menu admin di frontend **bukan** pengganti otorisasi backend.
 
 ## Pengujian
@@ -333,16 +342,15 @@ Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Com
 
 ### Issue terbuka yang direkomendasikan berikutnya
 
-Autentikasi backend (dependensi satu sama lain, kerjakan berurutan):
+Integrasi frontend autentikasi (dependensi satu sama lain, kerjakan berurutan):
 
 | Issue | Task | Judul |
 |---|---|---|
-| [#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29) | AUTH-004 | Implement Login and Session Management API |
 | [#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30) | AUTH-005 | Build Login and Registration UI |
 | [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) | AUTH-006 | Integrate Authentication State and Route Protection |
 | [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
 
-(AUTH-001–003 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
+(AUTH-001–004 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
 
 ## Tim
 

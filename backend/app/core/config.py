@@ -9,6 +9,8 @@ BACKEND_DIR = Path(__file__).resolve().parents[2]
 class Settings(BaseSettings):
     database_url: str
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    secret_key: str
+    access_token_expire_minutes: int = 60
 
     model_config = SettingsConfigDict(
         env_file=(BACKEND_DIR / ".env", BACKEND_DIR.parent / ".env"),
