@@ -9,15 +9,17 @@
 
 .practice-question {
   padding: var(--space-3);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .practice-question__text {
   margin: 0 0 var(--space-2);
   font-size: 1.05rem;
   font-weight: 600;
+  color: var(--color-text);
 }
 
 .practice-question__options {
@@ -32,32 +34,34 @@
   gap: var(--space-2);
   padding: var(--space-2);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-primary);
+  background: rgb(21 121 215 / 0.15);
+  color: var(--color-text);
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .practice-option:hover {
-  border-color: var(--color-primary);
+  background: rgb(21 121 215 / 0.3);
 }
 
 .practice-option:has(input:focus-visible) {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-cyan);
   outline-offset: 2px;
 }
 
 .practice-option--selected {
-  border-color: var(--color-primary);
-  background: var(--color-lavender);
+  border-color: var(--color-accent);
+  background: rgb(255 0 238 / 0.12);
 }
 
 .practice-option input {
-  accent-color: var(--color-primary);
+  accent-color: var(--color-accent);
 }
 
 .practice-option__letter {
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   min-width: 1.2em;
 }
 
@@ -75,17 +79,34 @@
   font-size: 0.9rem;
 }
 
+.practice-form__hint {
+  color: rgb(255 255 255 / 0.7);
+}
+
 .practice-form__error {
   margin-top: var(--space-3);
   color: var(--color-accent);
   font-weight: 600;
 }
 
+.practice-result {
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.practice-result .page-title {
+  color: var(--color-text);
+}
+
 .practice-result__summary {
   margin: var(--space-2) 0 var(--space-3);
   padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--color-lavender);
+  border-radius: var(--radius-sm);
+  background: rgb(21 121 215 / 0.2);
+  border: 1px solid var(--color-primary);
   text-align: center;
 }
 
@@ -93,11 +114,12 @@
   margin: 0;
   font-size: 2.75rem;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .practice-result__detail {
   margin: var(--space-1) 0 0;
+  color: var(--color-text);
 }
 
 .practice-result__list {
@@ -114,6 +136,8 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   border-left-width: 4px;
+  background: #fafafa;
+  color: var(--color-text);
 }
 
 .practice-result__item--correct {
@@ -132,6 +156,7 @@
 .practice-result__explanation {
   margin: var(--space-1) 0 0;
   font-size: 0.95rem;
+  color: var(--color-text-muted);
 }
 
 .practice-result__actions {

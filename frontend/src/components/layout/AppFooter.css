@@ -1,8 +1,9 @@
 .app-footer {
   margin-top: auto;
-  background: var(--color-text);
-  color: #fff;
+  background: #141414;
+  color: rgb(255 255 255 / 0.85);
   padding-block: var(--space-3);
+  border-top: 1px solid rgb(255 255 255 / 0.08);
 }
 
 .app-footer__inner {
@@ -15,19 +16,20 @@
 .app-footer__brand {
   margin: 0;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  color: #fff;
 }
 
 .app-footer__tagline {
   margin: 0;
   font-size: 0.9rem;
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .app-footer__note {
   margin: 0;
   font-size: 0.85rem;
-  opacity: 0.75;
+  opacity: 0.65;
 }
 
 @media (min-width: 768px) {

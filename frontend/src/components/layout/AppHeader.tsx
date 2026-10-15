@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import Avatar from '../common/Avatar';
 import './AppHeader.css';
 
 const NAV_ITEMS = [
@@ -29,6 +30,9 @@ export default function AppHeader() {
             </NavLink>
           ))}
         </nav>
+        <span className="app-header__avatar">
+          <Avatar size={32} />
+        </span>
       </div>
     </header>
   );

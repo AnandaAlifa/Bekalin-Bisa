@@ -1,7 +1,8 @@
 .app-header {
-  background: var(--color-primary);
+  background: var(--color-purple-soft);
   color: #fff;
-  padding-block: 0.75rem;
+  padding-block: 0.65rem;
+  border-bottom: 2px solid var(--color-purple);
 }
 
 .app-header__inner {
@@ -13,9 +14,9 @@
 }
 
 .app-header__brand {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   color: #fff;
   text-decoration: none;
 }
@@ -26,44 +27,50 @@
 }
 
 .app-header__tagline {
-  font-size: 0.8rem;
-  opacity: 0.9;
+  font-size: 0.75rem;
+  opacity: 0.85;
   margin-right: auto;
 }
 
 .app-header__nav {
-  display: flex;
-  flex-wrap: wrap;
+  display: none;
   gap: 0.25rem;
 }
 
 .app-header__link {
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.85rem;
   border-radius: var(--radius-sm);
   color: #fff;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
 }
 
 .app-header__link:hover,
 .app-header__link:focus-visible {
-  background: rgb(255 255 255 / 0.15);
+  background: rgb(255 255 255 / 0.12);
   text-decoration: none;
 }
 
 .app-header__link--active {
-  background: rgb(255 255 255 / 0.22);
-  outline: 2px solid #fff;
-  outline-offset: -2px;
+  background: var(--color-accent);
+  border-color: var(--color-primary-dark);
 }
 
 @media (min-width: 768px) {
-  .app-header__tagline {
-    order: 0;
-  }
-
   .app-header__nav {
-    margin-left: 0.5rem;
+    display: flex;
+  }
+}
+
+.app-header__avatar {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .app-header__avatar {
+    margin-left: 0;
   }
 }

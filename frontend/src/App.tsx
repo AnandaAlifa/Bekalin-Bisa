@@ -1,5 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import AppHeader from './components/layout/AppHeader';
+import AppBottomNav from './components/layout/AppBottomNav';
 import AppFooter from './components/layout/AppFooter';
 import DashboardPage from './pages/DashboardPage';
 import SubjectsPage from './pages/SubjectsPage';
@@ -34,6 +35,7 @@ export default function App() {
             />
           </Routes>
         </main>
+        <AppBottomNav />
         <AppFooter />
       </div>
     </BrowserRouter>

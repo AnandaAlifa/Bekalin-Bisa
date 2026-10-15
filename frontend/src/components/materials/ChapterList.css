@@ -9,14 +9,16 @@
 
 .chapter-item {
   padding: var(--space-3);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .chapter-item__title {
   margin: 0 0 var(--space-2);
   font-size: 1.1rem;
+  color: var(--color-text);
 }
 
 .chapter-item__lessons {
@@ -32,19 +34,20 @@
   display: block;
   padding: 0.7rem 1rem;
   border-radius: var(--radius-sm);
-  background: var(--color-lavender);
+  background: var(--color-accent);
+  border: 1px solid var(--color-primary-dark);
   text-decoration: none;
-  color: var(--color-text);
-  font-weight: 500;
+  color: #fff;
+  font-weight: 600;
 }
 
 .lesson-link:hover,
 .lesson-link:focus-visible {
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
   color: #fff;
 }
 
 .lesson-link:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--color-cyan);
   outline-offset: 2px;
 }
