@@ -227,6 +227,7 @@ Base URL: `http://localhost:8000/api/v1` — Swagger UI lengkap di [`/docs`](htt
 | POST | `/auth/login` | Login — 200 `{access_token, token_type, expires_in, user}`; kredensial salah → 401 generik |
 | POST | `/auth/logout` | Logout kompatibilitas (stateless) |
 | GET | `/users/me` | Profil pengguna aktif — terlindungi `Authorization: Bearer <token>` |
+| PATCH | `/users/me` | Perbarui `username` / `bio` (parsial; `role`/`email` immutable) |
 | POST | `/admin/users` | Buat akun teacher/school_admin — **school_admin only** (403 lainnya; duplikat → 409) |
 | PATCH | `/admin/lessons/{id}` | Moderasi `is_published` materi — **school_admin only** (404 id tak ada) |
 | GET | `/subjects` | Daftar mata pelajaran terpublikasi |
@@ -299,7 +300,7 @@ Dokumentasi batasan MVP (sengaja, lihat ADR §8):
 - **Tanpa rate limiting** pada endpoint login.
 - **Role backend** kini `student` / `teacher` / `school_admin`. Endpoint admin (`POST /admin/users`, `PATCH /admin/lessons/{id}`) memeriksa role via dependency `require_role` — 401 tanpa token, 403 role salah. Otorisasi per-role pada endpoint lain (mis. materi/soal CRUD penuh) menyusul bersama fitur pengelolaan materi.
 - **Fallback demo** `localStorage` masih aktif untuk student demo — rencananya dihapus setelah data demo dimigrasikan ke backend.
-- **Profil** yang diedit tersimpan lokal; `PATCH /users/me` (prioritas P2) belum diimplementasikan.
+- **Profil** — `PATCH /users/me` memperbarui username/bio di backend (bertahan setelah refresh); field `role`/`email` immutable. Nama lengkap masih lokal (belum ada kolom `name` di backend).
 - **Lupa Kata Sandi** masih placeholder.
 
 ## Pengujian
@@ -368,8 +369,8 @@ Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Com
 ### Status pengembangan
 
 - ✅ **TASK-001–015** — infrastruktur, content API, frontend materi/latihan, E2E alur belajar.
-- ✅ **AUTH-001–008** (issue #26–#33) — autentikasi backend & frontend penuh: arsitektur (ADR-001), model user + migrasi, API registrasi/login/sesi, UI auth, integrasi sesi & proteksi route, test keamanan & E2E, serta otorisasi per-role backend (`require_role`, `POST /admin/users`, moderasi materi).
-- ⏳ Backlog berikutnya mengikuti [`build/task.md`](build/task.md) — mis. `PATCH /users/me`, rate limiting, migrasi akun demo student ke backend, pengelolaan materi penuh.
+- ✅ **AUTH-001–009** (issue #26–#34) — autentikasi backend & frontend penuh: arsitektur (ADR-001), model user + migrasi, API registrasi/login/sesi, UI auth, integrasi sesi & proteksi route, test keamanan & E2E, otorisasi per-role backend, serta profil persisten via `PATCH /users/me`.
+- ⏳ Backlog berikutnya mengikuti [`build/task.md`](build/task.md) — mis. rate limiting, migrasi akun demo student ke backend, pengelolaan materi penuh.
 
 ## Tim
 

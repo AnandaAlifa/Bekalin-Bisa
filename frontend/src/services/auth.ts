@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from './api';
+import { apiGet, apiPatch, apiPost } from './api';
 
 const TOKEN_KEY = 'bekalin.auth.token';
 
@@ -6,7 +6,7 @@ export interface BackendAuthUser {
   id: number;
   email: string;
   username: string;
-  role: 'student' | 'admin';
+  role: 'student' | 'teacher' | 'school_admin' | 'admin';
   bio: string | null;
 }
 
@@ -33,6 +33,15 @@ export function apiLogin(email: string, password: string): Promise<LoginResponse
 
 export function apiCurrentUser(token: string): Promise<BackendAuthUser> {
   return apiGet<BackendAuthUser>('/users/me', undefined, token);
+}
+
+export interface ProfilePatch {
+  username?: string;
+  bio?: string | null;
+}
+
+export function apiUpdateProfile(token: string, patch: ProfilePatch): Promise<BackendAuthUser> {
+  return apiPatch<BackendAuthUser>('/users/me', patch, token);
 }
 
 export function apiLogout(): Promise<{ detail: string }> {

@@ -59,6 +59,32 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
   return (await response.json()) as T;
 }
 
+export async function apiPatch<T>(path: string, body: unknown, token?: string): Promise<T> {
+  let response: Response;
+  const headers: Record<string, string> = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  try {
+    response = await fetch(`${apiBaseUrl}${path}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new ApiError(0, 'Tidak dapat terhubung ke server. Pastikan backend berjalan.');
+  }
+
+  if (!response.ok) {
+    throw await toApiError(response);
+  }
+
+  return (await response.json()) as T;
+}
+
 async function toApiError(response: Response): Promise<ApiError> {
   let detail = `Permintaan gagal (HTTP ${response.status}).`;
   try {

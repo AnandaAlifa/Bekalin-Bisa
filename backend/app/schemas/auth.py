@@ -31,3 +31,8 @@ class TokenOut(BaseModel):
 
 class MessageOut(BaseModel):
     detail: str
+
+
+class UserProfilePatch(BaseModel):
+    username: str | None = Field(default=None, min_length=3, max_length=100)
+    bio: str | None = Field(default=None, max_length=500)

@@ -1,22 +1,46 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotification } from '../contexts/NotificationContext';
+import { ApiError } from '../services/api';
 import Avatar from '../components/common/Avatar';
 import './ProfilPage.css';
 
 export default function ProfilPage() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, updateProfile } = useAuth();
   const { showNotification } = useNotification();
   const [name, setName] = useState(user?.name || '');
   const [username, setUsername] = useState(user?.username || '');
   const [bio, setBio] = useState(user?.bio || '');
+  const [isSaving, setIsSaving] = useState(false);
 
   if (!user) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const trimmedUsername = username.trim();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateUser({ name, username, bio });
-    showNotification('Profil Diperbarui', 'Perubahan profil berhasil disimpan.', 'success');
+    if (trimmedUsername.length < 3) {
+      showNotification(
+        'Username Terlalu Pendek',
+        'Username minimal 3 karakter.',
+        'error',
+      );
+      return;
+    }
+    setIsSaving(true);
+    try {
+      await updateProfile({ username: trimmedUsername, bio });
+      updateUser({ name });
+      showNotification('Profil Diperbarui', 'Perubahan profil berhasil disimpan.', 'success');
+    } catch (err) {
+      showNotification(
+        'Gagal Menyimpan Profil',
+        err instanceof ApiError ? err.message : 'Terjadi kesalahan tak terduga.',
+        'error',
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -54,6 +78,8 @@ export default function ProfilPage() {
               id="prof-username"
               type="text"
               required
+              minLength={3}
+              maxLength={100}
               className="form-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -66,13 +92,18 @@ export default function ProfilPage() {
             <textarea
               id="prof-bio"
               rows={3}
+              maxLength={500}
               className="form-input"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
             />
           </div>
-          <button type="submit" className="bekalin-button profil-submit">
-            Simpan Perubahan Profil
+          <button
+            type="submit"
+            className="bekalin-button profil-submit"
+            disabled={isSaving}
+          >
+            {isSaving ? 'Menyimpan…' : 'Simpan Perubahan Profil'}
           </button>
         </form>
       </div>

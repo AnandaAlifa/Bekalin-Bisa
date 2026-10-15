@@ -930,6 +930,35 @@ Perluas role backend ke `teacher` / `school_admin` dan terapkan otorisasi per-ro
 
 ---
 
+## AUTH-009 — Persist Profile Updates via PATCH /users/me
+
+**Labels:** `auth`, `backend`, `frontend`, `priority:medium`
+**Priority:** P2
+**Dependencies:** AUTH-004, AUTH-006
+**GitHub Issue:** [#34](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/34)
+
+### Objective
+
+Profil yang diedit via halaman Profil persisten di backend — bertahan setelah refresh/login ulang.
+
+### Scope
+
+- `PATCH /users/me` — body parsial `{ username?, bio? }`; `role`/`email` immutable.
+- Skema: username 3–100; bio maks 500.
+- FE: form Profil memanggil API; loading & error state; fallback lokal untuk sesi demo.
+- Test pytest + dokumentasi (ADR §8, README).
+
+### Acceptance Criteria
+
+- [x] `PATCH /users/me` 200 memperbarui username/bio di DB.
+- [x] 401 tanpa token; 422 validasi username/bio.
+- [x] `role`/`email` di body diabaikan.
+- [x] Form Profil FE mengirim PATCH; bertahan setelah refresh.
+- [x] Error API → notifikasi; tombol disabled saat pending.
+- [x] 75 test backend lulus; build/lint FE 0 error baru.
+
+---
+
 ### Recommended Execution Order (Authentication)
 
 1. AUTH-001 — Define architecture.

@@ -271,7 +271,7 @@ Body parsial: `{ "username"?, "bio"? }`. **Tidak** menerima `role` atau `email` 
 | Migrasi ke httpOnly cookie + CSRF | Direkomendasikan sebelum produksi | Butuh HTTPS; mengurangi risiko XSS pencurian token |
 | Email verification & password reset | Di luar MVP | Spec §15.4 |
 | Role `teacher` / `school_admin` | **Selesai (AUTH-008)** | Role backend diperluas ke `student`/`teacher`/`school_admin`; `require_role` diterapkan di `POST /admin/users` & `PATCH /admin/lessons/{id}`; data `admin` lama dimigrasikan ke `school_admin` |
-| Profil update (`PATCH /users/me`) | P2 | Dapat dikerjakan di AUTH-006/007 |
+| Profil update (`PATCH /users/me`) | **Selesai (AUTH-009)** | Body parsial `{username?, bio?}`; `role`/`email` immutable (diabaikan bila dikirim) |
 
 ---
 

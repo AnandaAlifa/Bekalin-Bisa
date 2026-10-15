@@ -4,10 +4,11 @@ import { ApiError } from '../services/api';
 import {
   apiCurrentUser,
   apiLogout,
+  apiUpdateProfile,
   clearAccessToken,
   getAccessToken,
 } from '../services/auth';
-import type { BackendAuthUser } from '../services/auth';
+import type { BackendAuthUser, ProfilePatch } from '../services/auth';
 
 export type UserRole = 'student' | 'teacher' | 'school_admin';
 
@@ -112,6 +113,7 @@ interface AuthContextValue {
   ) => void;
   logout: () => void;
   updateUser: (patch: Partial<AuthUser>) => void;
+  updateProfile: (patch: ProfilePatch) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -211,9 +213,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser((prev) => (prev ? { ...prev, ...patch } : prev));
   }, []);
 
+  const updateProfile = useCallback(
+    async (patch: ProfilePatch) => {
+      const token = getAccessToken();
+      if (token) {
+        const updated = await apiUpdateProfile(token, patch);
+        updateUser({
+          username: updated.username,
+          bio: updated.bio ?? '',
+          ...(patch.username ? { name: patch.username } : {}),
+        });
+        return;
+      }
+      updateUser({
+        ...(patch.username ? { name: patch.username, username: patch.username } : {}),
+        ...(patch.bio !== undefined ? { bio: patch.bio ?? '' } : {}),
+      });
+    },
+    [updateUser],
+  );
+
   const value = useMemo(
-    () => ({ user, isLoading, login, loginWithBackendUser, logout, updateUser }),
-    [user, isLoading, login, loginWithBackendUser, logout, updateUser],
+    () => ({ user, isLoading, login, loginWithBackendUser, logout, updateUser, updateProfile }),
+    [user, isLoading, login, loginWithBackendUser, logout, updateUser, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
