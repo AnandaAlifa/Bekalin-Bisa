@@ -129,7 +129,7 @@ Login (demo) → Materi (/subjects)
 
 ```bash
 git clone https://github.com/AnandaAlifa/Bekalin-Bisa.git
-cd BELAJARIN
+cd Bekalin-Bisa
 ```
 
 ### 2. Environment
