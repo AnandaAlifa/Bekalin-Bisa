@@ -408,6 +408,8 @@ MVP siap didemonstrasikan jika:
 
 Bagian ini mendefinisikan kebutuhan autentikasi yang harus dipenuhi backend dan frontend. Autentikasi wajib ditangani oleh backend, bukan sekadar state frontend.
 
+> Keputusan arsitektur autentikasi (strategi JWT Bearer, lifecycle, kontrak API, asesmen keamanan) terdokumentasi di [`build/auth-architecture.md`](auth-architecture.md) (ADR-001).
+
 ### 15.1 Gambaran Fitur
 
 PINTARA harus menyediakan sistem autentikasi yang memungkinkan pengguna mendaftar, masuk, keluar, dan mengakses fitur sesuai status autentikasi. Autentikasi harus terintegrasi dengan pengalaman belajar yang ada: materi pembelajaran, video interaktif, lab interaktif, kuis, dan progres belajar bila fitur tersebut memerlukan akun pengguna.

@@ -691,6 +691,10 @@ Define a secure authentication flow that fits the existing PINTARA architecture.
 
 Repository and specification audit.
 
+### Decision Record
+
+Hasil audit dan keputusan terdokumentasi di [`build/auth-architecture.md`](auth-architecture.md) (ADR-001): strategi JWT Bearer (HS256), lifecycle autentikasi, kontrak API register/login/logout/users-me, model user, asesmen penyimpanan token di frontend, env vars (`SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`), dan keterbatasan MVP.
+
 ---
 
 ## AUTH-002 — Implement User Model and Database Migration
