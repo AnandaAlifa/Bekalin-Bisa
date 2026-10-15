@@ -24,19 +24,14 @@
   flex-shrink: 0;
 }
 
-.app-header__brand-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.app-header__brand-logo {
+  display: block;
   width: 36px;
   height: 36px;
+  object-fit: contain;
   border-radius: var(--radius-md);
-  background: var(--color-indigo-600);
-  color: #ffffff;
-  font-weight: 900;
-  font-size: 1.1rem;
-  border: 1px solid var(--color-indigo-800);
-  box-shadow: 0 2px 0 var(--color-indigo-800);
+  border: 1px solid var(--color-slate-200);
+  background: #ffffff;
 }
 
 .app-header__brand-text {

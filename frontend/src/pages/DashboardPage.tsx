@@ -6,7 +6,7 @@ export default function DashboardPage() {
     <div className="page-container dashboard-page">
       <section className="dashboard-hero bekalin-box animate-pop-in">
         <div className="dashboard-hero__text">
-          <h1 className="page-title">Selamat datang di PINTARA</h1>
+          <h1 className="page-title">Selamat datang di BEKALIN</h1>
           <p className="page-subtitle">
             Mulai dari materi belajar, lalu uji pemahamanmu lewat latihan soal.
           </p>

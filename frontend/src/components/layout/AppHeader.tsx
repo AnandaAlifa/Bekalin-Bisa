@@ -9,11 +9,9 @@ export default function AppHeader() {
     <header className="app-header">
       <div className="app-header__inner">
         <Link to="/" className="app-header__brand">
-          <span className="app-header__brand-icon" aria-hidden="true">
-            P
-          </span>
+          <img src="/logo.jpg" alt="" className="app-header__brand-logo" width={36} height={36} />
           <span className="app-header__brand-text">
-            PIN<span className="app-header__brand-accent">TARA</span>
+            BEKA<span className="app-header__brand-accent">LIN</span>
           </span>
         </Link>
 

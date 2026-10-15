@@ -16,7 +16,7 @@ const ICON_PATHS: Record<string, string> = {
 export default function AppSidebar() {
   return (
     <aside className="app-sidebar" aria-label="Menu navigasi sidebar">
-      <p className="app-sidebar__heading">Menu Pintara</p>
+      <p className="app-sidebar__heading">Menu Bekalin</p>
       <nav className="app-sidebar__nav">
         {SIDEBAR_ITEMS.map((item) => (
           <NavLink
