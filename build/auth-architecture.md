@@ -103,8 +103,8 @@ Base prefix: `/api/v1` (mengikuti konvensi yang ada).
 
 | Field | Validasi |
 |---|---|
-| `email` | format email valid; unik (case-insensitive) |
-| `password` | min 8 karakter; tanpa validasi emoji di backend (validasi FE bersifat pelengkap) |
+| `email` | format email valid (`EmailStr`); unik (case-insensitive) |
+| `password` | min 8, maks 72 karakter (batas bcrypt agar tidak terpotong diam-diam); tanpa validasi emoji di backend (validasi FE bersifat pelengkap) |
 | `username` | min 3, max 100 karakter |
 
 **Response `201`**
@@ -126,7 +126,7 @@ Base prefix: `/api/v1` (mengikuti konvensi yang ada).
 
 | Status | Kondisi | Body |
 |---|---|---|
-| `400` | validasi gagal | `{ "detail": "..." }` (Pydantic) |
+| `422` | validasi skema gagal (Pydantic, default FastAPI — konsisten dengan endpoint content/practice yang ada) | `{ "detail": [...] }` |
 | `409` | email sudah terdaftar | `{ "detail": "Email sudah terdaftar" }` |
 
 ### 5.2 `POST /auth/login`

@@ -203,7 +203,7 @@ Skema dikelola penuh dengan Alembic (folder [`backend/alembic/`](backend/alembic
 | `practice_answers` | Jawaban per soal pada satu attempt |
 | `users` | Akun autentikasi: email unik lowercase, `password_hash`, `role` CHECK (`student`/`admin`), timestamps |
 
-> Tabel `users` sudah ada (migrasi `0bfcf7c5549f`, AUTH-002 / issue [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27)). Endpoint `/auth/*` dan proteksi sesi server-side masih dikerjakan di issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
+> Tabel `users` sudah ada (migrasi `0bfcf7c5549f`, AUTH-002 / issue [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27)); `POST /auth/register` sudah aktif (AUTH-003 / issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)). Endpoint login dan proteksi sesi server-side masih dikerjakan di issue [#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
 
 Perintah berguna (dari `backend/`):
 
@@ -220,6 +220,7 @@ Base URL: `http://localhost:8000/api/v1` — Swagger UI lengkap di [`/docs`](htt
 | Method | Endpoint | Deskripsi |
 |---|---|---|
 | GET | `/health` | Health check |
+| POST | `/auth/register` | Pendaftaran akun (201; role selalu `student`; duplikat email → 409) |
 | GET | `/subjects` | Daftar mata pelajaran terpublikasi |
 | GET | `/subjects/{subject_id}/chapters` | Daftar bab per mata pelajaran |
 | GET | `/chapters/{chapter_id}/lessons` | Daftar subbab per bab |
@@ -249,7 +250,7 @@ Content-Type: application/json
 
 ## Autentikasi (Saat Ini)
 
-> **Penting:** autentikasi saat ini **hanya client-side demo** di `AuthContext` (React + `localStorage`). Model `users` + migrasi database sudah ada (AUTH-002, issue [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27)), tetapi endpoint backend `/auth/register` atau `/auth/login`, hash password, dan sesi/token server-side **belum ada**. Autentikasi backend yang sesungguhnya masih dikerjakan di issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
+> **Penting:** autentikasi saat ini **hanya client-side demo** di `AuthContext` (React + `localStorage`). Endpoint `POST /auth/register` (AUTH-003, issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)) dan tabel `users` sudah ada di backend, tetapi endpoint `/auth/login`, verifikasi kredensial, dan sesi/token server-side **belum ada**. Sisa autentikasi backend masih dikerjakan di issue [#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
 
 ### Akun demo
 
@@ -336,13 +337,12 @@ Autentikasi backend (dependensi satu sama lain, kerjakan berurutan):
 
 | Issue | Task | Judul |
 |---|---|---|
-| [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28) | AUTH-003 | Implement Registration API |
 | [#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29) | AUTH-004 | Implement Login and Session Management API |
 | [#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30) | AUTH-005 | Build Login and Registration UI |
 | [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) | AUTH-006 | Integrate Authentication State and Route Protection |
 | [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
 
-(AUTH-001 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26) dan AUTH-002 / [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
+(AUTH-001–003 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
 
 ## Tim
 
