@@ -1,4 +1,7 @@
-import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import AppHeader from './components/layout/AppHeader';
+import AppFooter from './components/layout/AppFooter';
+import DashboardPage from './pages/DashboardPage';
 import SubjectsPage from './pages/SubjectsPage';
 import ChaptersPage from './pages/ChaptersPage';
 import LessonPage from './pages/LessonPage';
@@ -9,17 +12,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="app-shell">
-        <header className="app-header">
-          <div className="page-container app-header__inner">
-            <Link className="app-header__brand" to="/subjects">
-              PINTARA
-            </Link>
-            <span className="app-header__tagline">Belajar, Bertumbuh, Berprestasi</span>
-          </div>
-        </header>
-        <main>
+        <AppHeader />
+        <main className="app-shell__main">
           <Routes>
-            <Route path="/" element={<Navigate to="/subjects" replace />} />
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/subjects" element={<SubjectsPage />} />
             <Route path="/subjects/:subjectId" element={<ChaptersPage />} />
             <Route path="/lessons/:lessonId" element={<LessonPage />} />
@@ -30,13 +26,15 @@ export default function App() {
                 <div className="page-container">
                   <h1 className="page-title">Halaman tidak ditemukan</h1>
                   <p className="page-subtitle">
-                    Kembali ke <Link to="/subjects">daftar mata pelajaran</Link>.
+                    Kembali ke <Link to="/">dashboard</Link> atau{' '}
+                    <Link to="/subjects">daftar mata pelajaran</Link>.
                   </p>
                 </div>
               }
             />
           </Routes>
         </main>
+        <AppFooter />
       </div>
     </BrowserRouter>
   );

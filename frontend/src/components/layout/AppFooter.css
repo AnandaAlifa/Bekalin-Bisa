@@ -1,0 +1,44 @@
+.app-footer {
+  margin-top: auto;
+  background: var(--color-text);
+  color: #fff;
+  padding-block: var(--space-3);
+}
+
+.app-footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: 0;
+}
+
+.app-footer__brand {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.app-footer__tagline {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.app-footer__note {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+@media (min-width: 768px) {
+  .app-footer__inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .app-footer__note {
+    margin-left: auto;
+  }
+}
