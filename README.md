@@ -128,7 +128,7 @@ Login (demo) → Materi (/subjects)
 
 ```bash
 git clone https://github.com/AnandaAlifa/Pintara.git
-cd Pintara
+cd BELAJARIN
 ```
 
 ### 2. Environment
