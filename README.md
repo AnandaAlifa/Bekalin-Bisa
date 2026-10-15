@@ -206,7 +206,7 @@ Skema dikelola penuh dengan Alembic ([`backend/alembic/`](backend/alembic/)):
 | `questions` | Soal pilihan ganda: `options` (JSON), `correct_option` (hanya backend), `explanation` |
 | `practice_attempts` | Ringkasan hasil: skor, jumlah benar/total, waktu submit |
 | `practice_answers` | Jawaban per soal pada satu attempt |
-| `users` | Akun autentikasi: email unik lowercase, `password_hash` (bcrypt), `role` CHECK (`student`/`admin`), timestamps |
+| `users` | Akun autentikasi: email unik lowercase, `password_hash` (bcrypt), `role` CHECK (`student`/`teacher`/`school_admin`), timestamps |
 
 Perintah berguna (dari `backend/`):
 
@@ -227,6 +227,8 @@ Base URL: `http://localhost:8000/api/v1` — Swagger UI lengkap di [`/docs`](htt
 | POST | `/auth/login` | Login — 200 `{access_token, token_type, expires_in, user}`; kredensial salah → 401 generik |
 | POST | `/auth/logout` | Logout kompatibilitas (stateless) |
 | GET | `/users/me` | Profil pengguna aktif — terlindungi `Authorization: Bearer <token>` |
+| POST | `/admin/users` | Buat akun teacher/school_admin — **school_admin only** (403 lainnya; duplikat → 409) |
+| PATCH | `/admin/lessons/{id}` | Moderasi `is_published` materi — **school_admin only** (404 id tak ada) |
 | GET | `/subjects` | Daftar mata pelajaran terpublikasi |
 | GET | `/subjects/{subject_id}/chapters` | Daftar bab per mata pelajaran |
 | GET | `/chapters/{chapter_id}/lessons` | Daftar subbab per bab |
@@ -275,17 +277,18 @@ Strategi: **JWT Bearer (HS256)** + **bcrypt**, stateless, access token 60 menit.
 4. **Route terlindungi** — guard `RequireAuth` mengarahkan unautentikasi ke `/login` dan kembali ke halaman asal setelah login. **Backend tetap memverifikasi token secara independen** — guard frontend bukan kontrol keamanan tunggal.
 5. **Logout** — menghapus token, memanggil `POST /auth/logout`, dan mereset state UI.
 
-### Akun demo (fallback client-side)
+### Akun demo
 
-Untuk keperluan demo UI tanpa backend, tiga akun berikut tetap didukung lewat fallback `localStorage`:
+**Backend (JWT sungguhan)** — hasil seed (`python -m app.db.seed`):
 
 | Role | Email | Password |
 |---|---|---|
-| Student | `budi@student.sch.id` | `siswa123` |
-| Guru | `guru@school.sch.id` | `guru123` |
-| Admin sekolah | `admin@school.sch.id` | `admin123` |
+| Teacher | `teacher@school.sch.id` | `guru123` |
+| School admin | `admin@school.sch.id` | `admin123` |
 
-Akun backend yang didaftarkan melalui Sign Up atau `POST /auth/register` memakai JWT sungguhan dan tidak terikat fallback ini.
+Akun **school_admin** dapat mencoba `POST /api/v1/admin/users` dan `PATCH /api/v1/admin/lessons/{id}` di Swagger. Student demo (`budi@student.sch.id` / `siswa123`) dan akun localStorage lama (`guru@`, `admin@`) masih didukung fallback client-side.
+
+Akun baru melalui **Sign Up** selalu berrole `student` — akun teacher/school_admin hanya dibuat oleh school_admin via `POST /admin/users`.
 
 ### Limitasi
 
@@ -294,8 +297,8 @@ Dokumentasi batasan MVP (sengaja, lihat ADR §8):
 - **Logout stateless** — token yang sudah terbit tetap berlaku sampai kedaluarsa; tidak ada daftar blokir di server.
 - **Tanpa refresh token** — setelah token kedaluarsa (60 menit), pengguna login ulang.
 - **Tanpa rate limiting** pada endpoint login.
-- **Role backend** baru `student` / `admin`; otorisasi per-role pada endpoint dan role `teacher`/`school_admin` menyusul.
-- **Fallback demo** `localStorage` masih aktif — rencananya dihapus setelah data demo dimigrasikan ke backend.
+- **Role backend** kini `student` / `teacher` / `school_admin`. Endpoint admin (`POST /admin/users`, `PATCH /admin/lessons/{id}`) memeriksa role via dependency `require_role` — 401 tanpa token, 403 role salah. Otorisasi per-role pada endpoint lain (mis. materi/soal CRUD penuh) menyusul bersama fitur pengelolaan materi.
+- **Fallback demo** `localStorage` masih aktif untuk student demo — rencananya dihapus setelah data demo dimigrasikan ke backend.
 - **Profil** yang diedit tersimpan lokal; `PATCH /users/me` (prioritas P2) belum diimplementasikan.
 - **Lupa Kata Sandi** masih placeholder.
 
@@ -365,8 +368,8 @@ Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Com
 ### Status pengembangan
 
 - ✅ **TASK-001–015** — infrastruktur, content API, frontend materi/latihan, E2E alur belajar.
-- ✅ **AUTH-001–007** (issue #26–#32) — autentikasi backend & frontend penuh: arsitektur (ADR-001), model user + migrasi, API registrasi/login/sesi, UI auth, integrasi sesi & proteksi route, test keamanan & E2E.
-- ⏳ Backlog berikutnya mengikuti [`build/task.md`](build/task.md) — mis. otorisasi per-role, `PATCH /users/me`, rate limiting, migrasi akun demo ke backend.
+- ✅ **AUTH-001–008** (issue #26–#33) — autentikasi backend & frontend penuh: arsitektur (ADR-001), model user + migrasi, API registrasi/login/sesi, UI auth, integrasi sesi & proteksi route, test keamanan & E2E, serta otorisasi per-role backend (`require_role`, `POST /admin/users`, moderasi materi).
+- ⏳ Backlog berikutnya mengikuti [`build/task.md`](build/task.md) — mis. `PATCH /users/me`, rate limiting, migrasi akun demo student ke backend, pengelolaan materi penuh.
 
 ## Tim
 

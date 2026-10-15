@@ -898,6 +898,38 @@ Verify the complete authentication lifecycle.
 
 ---
 
+## AUTH-008 — Backend Role Authorization (teacher/school_admin)
+
+**Labels:** `auth`, `backend`, `security`, `priority:high`
+**Priority:** P1
+**Dependencies:** AUTH-004, AUTH-006
+**GitHub Issue:** [#33](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/33)
+
+### Objective
+
+Perluas role backend ke `teacher` / `school_admin` dan terapkan otorisasi per-role di server (spec §15.3: endpoint admin memeriksa role di backend).
+
+### Scope
+
+- Role backend: `student` / `teacher` / `school_admin`; migrasi data `admin` → `school_admin`.
+- Dependency `require_role(*roles)` (401 tanpa token, 403 role salah).
+- `POST /admin/users` — school_admin membuat akun teacher/school_admin (register publik tetap `student`).
+- `PATCH /admin/lessons/{id}` — moderasi `is_published` (endpoint admin terwakili).
+- Seed akun demo teacher & school_admin; FE map role backend → role FE.
+- Dokumentasi: ADR-001 §8, README.
+
+### Acceptance Criteria
+
+- [x] Role backend diperluas; data `admin` lama dimigrasikan.
+- [x] Register publik tetap memaksa `student`.
+- [x] `require_role` menolak 401/403 di endpoint admin.
+- [x] `POST /admin/users`: 201 school_admin; 403 student/teacher; 409 duplikat; role `student` ditolak 422.
+- [x] `PATCH /admin/lessons/{id}`: toggle `is_published`; 404 id tak ada.
+- [x] FE mapping teacher/school_admin.
+- [x] 69 test backend lulus; build/lint FE 0 error baru.
+
+---
+
 ### Recommended Execution Order (Authentication)
 
 1. AUTH-001 — Define architecture.

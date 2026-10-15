@@ -6,14 +6,17 @@ from sqlalchemy.orm import Mapped, mapped_column, validates
 from app.db.base import Base
 
 ROLE_STUDENT = "student"
-ROLE_ADMIN = "admin"
-ALLOWED_ROLES = (ROLE_STUDENT, ROLE_ADMIN)
+ROLE_TEACHER = "teacher"
+ROLE_SCHOOL_ADMIN = "school_admin"
+ALLOWED_ROLES = (ROLE_STUDENT, ROLE_TEACHER, ROLE_SCHOOL_ADMIN)
 
 
 class User(Base):
     __tablename__ = "users"
     __table_args__ = (
-        CheckConstraint("role IN ('student', 'admin')", name="ck_users_role"),
+        CheckConstraint(
+            "role IN ('student', 'teacher', 'school_admin')", name="ck_users_role"
+        ),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)

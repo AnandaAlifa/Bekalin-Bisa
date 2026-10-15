@@ -77,7 +77,7 @@ Mengikuti `build/spec.md` §7.1 dan konvensi SQLAlchemy yang ada (`Mapped` / `ma
 | `password_hash` | `String(128)` | not null; bcrypt hash, **bukan** plaintext |
 | `username` | `String(100)` | not null |
 | `bio` | `Text` | nullable |
-| `role` | `String(20)` | not null, default `'student'`; constraint CHECK IN (`student`,`admin`) — `school_admin`/`teacher` dipetakan ke `admin` atau ekstensi role di masa depan (lihat §8) |
+| `role` | `String(20)` | not null, default `'student'`; constraint CHECK IN (`student`,`teacher`,`school_admin`) — diperluas di AUTH-008; data `admin` lama dimigrasikan ke `school_admin` |
 | `created_at` | `DateTime(timezone=True)` | server default `now()` |
 | `updated_at` | `DateTime(timezone=True)` | onupdate `now()` |
 
@@ -270,7 +270,7 @@ Body parsial: `{ "username"?, "bio"? }`. **Tidak** menerima `role` atau `email` 
 | Rate limiting login | Opsional (AUTH-004 bila sempat) | `slowapi` atau middleware sederhana |
 | Migrasi ke httpOnly cookie + CSRF | Direkomendasikan sebelum produksi | Butuh HTTPS; mengurangi risiko XSS pencurian token |
 | Email verification & password reset | Di luar MVP | Spec §15.4 |
-| Role `teacher` / `school_admin` | Di-defer | MVP hanya `student`/`admin`; mapping role FE saat ini bersifat UI-saja sampai backend role diperluas |
+| Role `teacher` / `school_admin` | **Selesai (AUTH-008)** | Role backend diperluas ke `student`/`teacher`/`school_admin`; `require_role` diterapkan di `POST /admin/users` & `PATCH /admin/lessons/{id}`; data `admin` lama dimigrasikan ke `school_admin` |
 | Profil update (`PATCH /users/me`) | P2 | Dapat dikerjakan di AUTH-006/007 |
 
 ---

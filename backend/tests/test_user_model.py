@@ -95,8 +95,25 @@ def test_invalid_role_rejected_by_orm_validator() -> None:
                 email="badrole@test.sch.id",
                 password_hash="h",
                 username="X",
-                role="school_admin",
+                role="superuser",
             )
+
+
+def test_staff_roles_accepted_by_orm_validator() -> None:
+    teacher = User(
+        email="teacher-ok@test.sch.id",
+        password_hash="h",
+        username="T",
+        role="teacher",
+    )
+    school_admin = User(
+        email="admin-ok@test.sch.id",
+        password_hash="h",
+        username="A",
+        role="school_admin",
+    )
+    assert teacher.role == "teacher"
+    assert school_admin.role == "school_admin"
 
 
 def test_invalid_role_rejected_by_database_check_constraint() -> None:
@@ -105,7 +122,7 @@ def test_invalid_role_rejected_by_database_check_constraint() -> None:
             session.execute(
                 text(
                     "INSERT INTO users (email, password_hash, username, role) "
-                    "VALUES ('rawcheck@test.sch.id', 'h', 'Raw', 'teacher')"
+                    "VALUES ('rawcheck@test.sch.id', 'h', 'Raw', 'superuser')"
                 )
             )
         assert "ck_users_role" in str(exc.value.orig)

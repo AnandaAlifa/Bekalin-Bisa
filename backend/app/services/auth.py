@@ -7,7 +7,9 @@ from app.models.user import ROLE_STUDENT, User
 from app.schemas.auth import UserLoginRequest, UserRegisterRequest
 
 
-def register_user(session: Session, payload: UserRegisterRequest) -> User:
+def register_user(
+    session: Session, payload: UserRegisterRequest, role: str = ROLE_STUDENT
+) -> User:
     email = payload.email.strip().lower()
     existing = session.scalar(select(User).where(User.email == email))
     if existing is not None:
@@ -17,7 +19,7 @@ def register_user(session: Session, payload: UserRegisterRequest) -> User:
         email=email,
         password_hash=hash_password(payload.password),
         username=payload.username,
-        role=ROLE_STUDENT,
+        role=role,
     )
     session.add(user)
     session.commit()

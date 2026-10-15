@@ -1,8 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.security import hash_password
 from app.db.session import SessionLocal
-from app.models import Chapter, Lesson, Question, Subject
+from app.models import Chapter, Lesson, Question, Subject, User
 
 SEED_SUBJECTS = [
     {
@@ -203,6 +204,41 @@ def seed_practice_questions(session: Session) -> int:
     return total
 
 
+DEMO_ACCOUNTS = [
+    {
+        "email": "teacher@school.sch.id",
+        "password": "guru123",
+        "username": "guru-demo",
+        "role": "teacher",
+    },
+    {
+        "email": "admin@school.sch.id",
+        "password": "admin123",
+        "username": "admin-demo",
+        "role": "school_admin",
+    },
+]
+
+
+def seed_demo_accounts(session: Session) -> int:
+    added = 0
+    for account in DEMO_ACCOUNTS:
+        existing = session.scalar(select(User).where(User.email == account["email"]))
+        if existing is not None:
+            continue
+        session.add(
+            User(
+                email=account["email"],
+                password_hash=hash_password(account["password"]),
+                username=account["username"],
+                role=account["role"],
+            )
+        )
+        added += 1
+    session.commit()
+    return added
+
+
 def main() -> None:
     with SessionLocal() as session:
         added = seed_learning_content(session)
@@ -215,6 +251,11 @@ def main() -> None:
             print(f"Seed soal selesai: {questions} soal ditambahkan.")
         else:
             print("Seed soal dilewati: data soal sudah ada.")
+        accounts = seed_demo_accounts(session)
+        if accounts:
+            print(f"Seed akun demo selesai: {accounts} akun ditambahkan.")
+        else:
+            print("Seed akun demo dilewati: akun sudah ada.")
 
 
 if __name__ == "__main__":

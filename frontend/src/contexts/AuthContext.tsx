@@ -76,6 +76,12 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
 const STORAGE_KEY = 'bekalin.auth.user';
 const USERS_KEY = 'bekalin.auth.users';
 
+function mapBackendRole(role: string): UserRole {
+  if (role === 'teacher') return 'teacher';
+  if (role === 'school_admin' || role === 'admin') return 'school_admin';
+  return 'student';
+}
+
 function loadStoredUser(): AuthUser | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -120,7 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: backendUser.email,
         name: extras?.name?.trim() || backendUser.username,
         username: backendUser.username,
-        role: backendUser.role === 'admin' ? 'school_admin' : 'student',
+        role: mapBackendRole(backendUser.role),
         schoolName: 'Sekolah',
         className: extras?.className ?? 'Kelas 11 IPA',
         sourceMode: 'COMPANY_PLUS_SCHOOL',
