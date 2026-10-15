@@ -27,7 +27,7 @@ export default function AppSidebar() {
 
   return (
     <aside className="app-sidebar" aria-label="Menu navigasi sidebar">
-      <p className="app-sidebar__heading">Menu Bekalin</p>
+      <p className="app-sidebar__heading">Menu Bekalin Bisa</p>
       <nav className="app-sidebar__nav">
         {mainItems.map((item) => (
           <NavLink

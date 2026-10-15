@@ -34,7 +34,7 @@ export default function SignupPage() {
     <div className="auth-page bekalin-gradient animate-fade-in">
       <div className="auth-card animate-pop-in">
         <div className="auth-header-text">
-          <h2 className="auth-title">Daftar Akun Bekalin</h2>
+          <h2 className="auth-title">Daftar Akun Bekalin Bisa</h2>
           <p className="auth-subtitle">Platform Pembelajaran Digital</p>
         </div>
         <form className="auth-form auth-form--compact" onSubmit={handleSubmit}>

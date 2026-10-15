@@ -10,7 +10,7 @@
 
 ## 1. Context
 
-PINTARA/BEKALIN saat ini berjalan tanpa autentikasi backend:
+PINTARA/BEKALIN BISA saat ini berjalan tanpa autentikasi backend:
 
 - Frontend memiliki `AuthContext` client-side (demo) yang menyimpan user di `localStorage` — **bukan** mekanisme keamanan.
 - Backend (FastAPI) hanya memiliki endpoint publik: content (`/subjects`, `/chapters`, `/lessons`) dan practice (`/questions`, `/attempts`). Tidak ada tabel `users`, tidak ada endpoint `/auth/*`, tidak ada proteksi endpoint.

@@ -73,7 +73,7 @@ export default function SubjectsPage() {
         <div>
           <h1 className="page-title">MATERI PEMBELAJARAN</h1>
           <p className="page-subtitle subjects-header__sub">
-            Jenjang: <span className="subjects-header__grade">{className}</span> | Bekalin Platform
+            Jenjang: <span className="subjects-header__grade">{className}</span> | Bekalin Bisa Platform
           </p>
         </div>
         <div className="subjects-header__grade-select">

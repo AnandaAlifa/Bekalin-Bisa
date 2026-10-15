@@ -166,7 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         schoolName: 'SMA Negeri Mitra',
         className: input.className,
         sourceMode: 'COMPANY_PLUS_SCHOOL',
-        bio: 'Siswa baru terdaftar di Bekalin.',
+        bio: 'Siswa baru terdaftar di Bekalin Bisa.',
       };
       const users = loadStoredUsers();
       users.push({ email: input.email, pass: input.pass, user: newUser });

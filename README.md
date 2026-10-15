@@ -1,8 +1,8 @@
-# BEKALIN
+# BEKALIN BISA
 
 > **Belajar, Bertumbuh, Berprestasi** — platform pembelajaran digital dengan materi terstruktur, latihan soal berskor backend, lab simulasi, ujian ber-mode terkunci, jadwal, konsultasi, dan panel guru/admin.
 
-[![Status](https://img.shields.io/badge/status-in%20development-orange)](https://github.com/AnandaAlifa/Pintara/issues)
+[![Status](https://img.shields.io/badge/status-in%20development-orange)](https://github.com/AnandaAlifa/Bekalin-Bisa/issues)
 [![Backend](https://img.shields.io/badge/backend-FastAPI-009688?logo=fastapi&logoColor=white)](backend/)
 [![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Vite-61DAFB?logo=vite&logoColor=white)](frontend/)
 [![License](https://img.shields.io/badge/license-unspecified-lightgrey)](#)
@@ -27,7 +27,7 @@
 
 ## Tentang
 
-BEKALIN (sebelumnya PINTARA) adalah aplikasi full-stack untuk alur belajar: membaca materi, mengerjakan latihan berskor backend, dan menjelajahi fitur pendukung (lab simulasi, ujian, jadwal, konsultasi, profil, panel guru/admin). Kunci jawaban tidak pernah dikirim ke klien sebelum submit — penilaian latihan sepenuhnya di backend.
+BEKALIN BISA (sebelumnya PINTARA) adalah aplikasi full-stack untuk alur belajar: membaca materi, mengerjakan latihan berskor backend, dan menjelajahi fitur pendukung (lab simulasi, ujian, jadwal, konsultasi, profil, panel guru/admin). Kunci jawaban tidak pernah dikirim ke klien sebelum submit — penilaian latihan sepenuhnya di backend.
 
 Proyek berstatus **pengembangan MVP**. Dokumen acuan:
 
@@ -49,7 +49,7 @@ Berikut fitur yang **sudah berjalan** di kode saat ini:
 - **Penilaian di backend** — skor `benar / total × 100` dihitung server; attempt dan jawaban per soal tersimpan di database.
 - **Hasil transparan** — status benar/salah per soal, kunci jawaban, dan penjelasan ditampilkan setelah submit; tersedia aksi **Kerjakan ulang**.
 
-### UI BEKALIN (design language cinematic neo-brutalist)
+### UI BEKALIN BISA (design language cinematic neo-brutalist)
 
 - **Design system** — palet Indigo/Pink/Slate, font Inter, `.bekalin-box` / `.bekalin-button`, animasi cinematic (fade-in, pop-in, slide) + dukungan `prefers-reduced-motion`.
 - **Layout responsif** — desktop: sidebar + header sticky; mobile: bottom nav 5 item + bottom sheet **Lainnya**.
@@ -109,7 +109,7 @@ Login (demo) → Materi (/subjects)
 | Lapisan | Teknologi |
 |---|---|
 | Frontend | React 19, Vite, TypeScript, React Router |
-| Styling | CSS modules per komponen + CSS variables (design language BEKALIN) |
+| Styling | CSS modules per komponen + CSS variables (design language BEKALIN BISA) |
 | Icons | FontAwesome 6.4 (CDN) |
 | Backend | Python, FastAPI, Pydantic |
 | Database | PostgreSQL |
@@ -127,7 +127,7 @@ Login (demo) → Materi (/subjects)
 ### 1. Clone
 
 ```bash
-git clone https://github.com/AnandaAlifa/Pintara.git
+git clone https://github.com/AnandaAlifa/Bekalin-Bisa.git
 cd BELAJARIN
 ```
 
@@ -201,8 +201,9 @@ Skema dikelola penuh dengan Alembic (folder [`backend/alembic/`](backend/alembic
 | `questions` | Soal pilihan ganda: `options` (JSON), `correct_option` (hanya backend), `explanation` |
 | `practice_attempts` | Ringkasan hasil: skor, jumlah benar/total, waktu submit |
 | `practice_answers` | Jawaban per soal pada satu attempt |
+| `users` | Akun autentikasi: email unik lowercase, `password_hash`, `role` CHECK (`student`/`admin`), timestamps |
 
-> Tabel `users` untuk autentikasi backend **belum ada** — sedang direncanakan di issue [#26](https://github.com/AnandaAlifa/Pintara/issues/26)–[#32](https://github.com/AnandaAlifa/Pintara/issues/32).
+> Tabel `users` sudah ada (migrasi `0bfcf7c5549f`, AUTH-002 / issue [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27)). Endpoint `/auth/*` dan proteksi sesi server-side masih dikerjakan di issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
 
 Perintah berguna (dari `backend/`):
 
@@ -248,7 +249,7 @@ Content-Type: application/json
 
 ## Autentikasi (Saat Ini)
 
-> **Penting:** autentikasi saat ini **hanya client-side demo** di `AuthContext` (React + `localStorage`). Belum ada endpoint backend `/auth/register` atau `/auth/login`, belum ada tabel `users`, dan belum ada sesi/token server-side. Autentikasi backend yang sesungguhnya masih berupa issue terbuka ([#26](https://github.com/AnandaAlifa/Pintara/issues/26)–[#32](https://github.com/AnandaAlifa/Pintara/issues/32)).
+> **Penting:** autentikasi saat ini **hanya client-side demo** di `AuthContext` (React + `localStorage`). Model `users` + migrasi database sudah ada (AUTH-002, issue [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27)), tetapi endpoint backend `/auth/register` atau `/auth/login`, hash password, dan sesi/token server-side **belum ada**. Autentikasi backend yang sesungguhnya masih dikerjakan di issue [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
 
 ### Akun demo
 
@@ -289,7 +290,7 @@ npm run build      # production build
 ## Struktur Proyek
 
 ```text
-Pintara/
+Bekalin-Bisa/
 ├── backend/
 │   ├── app/
 │   │   ├── api/routers/     # Endpoint REST (content, practice)
@@ -307,7 +308,7 @@ Pintara/
 │   │   ├── contexts/        # AuthContext (demo client-side), NotificationContext
 │   │   ├── pages/           # auth (Login/Signup/Forgot), Subjects, Chapters, Lesson, Practice, Lab, Ujian, Jadwal, Konsul, Profil, Teacher, Admin
 │   │   ├── services/        # API client (api.ts, content.ts, practice.ts)
-│   │   ├── styles/          # Global styles & design tokens BEKALIN
+│   │   ├── styles/          # Global styles & design tokens BEKALIN BISA
 │   │   └── types/           # Tipe TypeScript
 │   └── package.json
 ├── build/                   # Spesifikasi, desain, backlog (bukan build output)
@@ -320,7 +321,7 @@ Pintara/
 
 ## Alur Pengembangan
 
-Pekerjaan dikelola lewat [GitHub Issues](https://github.com/AnandaAlifa/Pintara/issues). Setiap issue mengikuti alur:
+Pekerjaan dikelola lewat [GitHub Issues](https://github.com/AnandaAlifa/Bekalin-Bisa/issues). Setiap issue mengikuti alur:
 
 ```text
 Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Commit → Push → Update & tutup issue
@@ -335,17 +336,17 @@ Autentikasi backend (dependensi satu sama lain, kerjakan berurutan):
 
 | Issue | Task | Judul |
 |---|---|---|
-| [#26](https://github.com/AnandaAlifa/Pintara/issues/26) | AUTH-001 | Define Authentication Architecture |
-| [#27](https://github.com/AnandaAlifa/Pintara/issues/27) | AUTH-002 | Implement User Model and Database Migration |
-| [#28](https://github.com/AnandaAlifa/Pintara/issues/28) | AUTH-003 | Implement Registration API |
-| [#29](https://github.com/AnandaAlifa/Pintara/issues/29) | AUTH-004 | Implement Login and Session Management API |
-| [#30](https://github.com/AnandaAlifa/Pintara/issues/30) | AUTH-005 | Build Login and Registration UI |
-| [#31](https://github.com/AnandaAlifa/Pintara/issues/31) | AUTH-006 | Integrate Authentication State and Route Protection |
-| [#32](https://github.com/AnandaAlifa/Pintara/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
+| [#28](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/28) | AUTH-003 | Implement Registration API |
+| [#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29) | AUTH-004 | Implement Login and Session Management API |
+| [#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30) | AUTH-005 | Build Login and Registration UI |
+| [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) | AUTH-006 | Integrate Authentication State and Route Protection |
+| [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
+
+(AUTH-001 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26) dan AUTH-002 / [#27](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/27) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
 
 ## Tim
 
-BEKALIN dibangun oleh:
+BEKALIN BISA dibangun oleh:
 
 | Nama |
 |---|

@@ -28,7 +28,7 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
     return (
       <div className="app-loading">
         <div className="app-loading__spinner" aria-hidden="true" />
-        <p>Memuat BEKALIN…</p>
+        <p>Memuat BEKALIN BISA…</p>
       </div>
     );
   }

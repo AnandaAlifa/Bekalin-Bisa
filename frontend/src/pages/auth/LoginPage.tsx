@@ -85,7 +85,7 @@ export default function LoginPage() {
         </div>
 
         <div className="auth-demo">
-          <p className="auth-demo__title">Akun Demo Bekalin:</p>
+          <p className="auth-demo__title">Akun Demo Bekalin Bisa:</p>
           <p>
             Siswa: <code className="auth-demo__code">budi@student.sch.id</code> /{' '}
             <code className="auth-demo__code">siswa123</code>

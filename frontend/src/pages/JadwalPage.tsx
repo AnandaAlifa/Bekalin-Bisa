@@ -8,7 +8,7 @@ export default function JadwalPage() {
       <div className="bekalin-box animate-pop-in" style={{ marginBottom: '1.5rem' }}>
         <h1 className="page-title">JADWAL BELAJAR</h1>
         <p className="page-subtitle" style={{ marginBottom: 0 }}>
-          Agenda harian dan mingguan kegiatan pembelajaran Bekalin.
+          Agenda harian dan mingguan kegiatan pembelajaran Bekalin Bisa.
         </p>
       </div>
 

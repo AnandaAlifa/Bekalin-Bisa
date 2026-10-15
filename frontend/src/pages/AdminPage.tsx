@@ -11,7 +11,7 @@ export default function AdminPage() {
       <div className="bekalin-box animate-pop-in" style={{ marginBottom: '1.5rem' }}>
         <h1 className="page-title">MENU ADMIN SEKOLAH</h1>
         <p className="page-subtitle" style={{ marginBottom: 0 }}>
-          Konfigurasi sistem, akun guru, dan pengaturan platform Bekalin.
+          Konfigurasi sistem, akun guru, dan pengaturan platform Bekalin Bisa.
         </p>
       </div>
 

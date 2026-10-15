@@ -36,7 +36,7 @@ export default function AppMobileMore({ isOpen, onClose }: Props) {
     >
       <div className="mobile-more-sheet animate-slide-up">
         <div className="mobile-more-sheet__header">
-          <h3 className="mobile-more-sheet__title">Menu Tambahan Bekalin</h3>
+          <h3 className="mobile-more-sheet__title">Menu Tambahan Bekalin Bisa</h3>
           <button type="button" className="mobile-more-sheet__close" onClick={onClose} aria-label="Tutup">
             <i className="fa-solid fa-xmark" />
           </button>
