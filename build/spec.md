@@ -404,8 +404,115 @@ MVP siap didemonstrasikan jika:
 - [ ] Apakah avatar dapat diunggah atau cukup avatar default?
 - [ ] Apakah admin perlu mengelola materi melalui UI atau cukup menggunakan seed data?
 
-## 15. Riwayat Versi
+## 15. Autentikasi dan Manajemen Akun Pengguna
+
+Bagian ini mendefinisikan kebutuhan autentikasi yang harus dipenuhi backend dan frontend. Autentikasi wajib ditangani oleh backend, bukan sekadar state frontend.
+
+### 15.1 Gambaran Fitur
+
+PINTARA harus menyediakan sistem autentikasi yang memungkinkan pengguna mendaftar, masuk, keluar, dan mengakses fitur sesuai status autentikasi. Autentikasi harus terintegrasi dengan pengalaman belajar yang ada: materi pembelajaran, video interaktif, lab interaktif, kuis, dan progres belajar bila fitur tersebut memerlukan akun pengguna.
+
+### 15.2 Kebutuhan Fungsional
+
+#### 15.2.1 Pendaftaran
+
+- Pengguna dapat membuat akun melalui formulir pendaftaran.
+- Field wajib mengikuti desain produk dan kebutuhan data pengguna yang ada.
+- Backend harus memvalidasi seluruh field yang dikirim.
+- Sistem harus menolak input tidak valid dan akun ganda sesuai identifier unik yang dipilih (misalnya email).
+- Password tidak boleh disimpan dalam bentuk plaintext.
+- Frontend harus menampilkan error validasi yang dapat dipahami.
+- Setelah pendaftaran berhasil, sistem mengikuti alur autentikasi yang didefinisikan desain produk. Login otomatis setelah pendaftaran tidak boleh diasumsikan kecuali dinyatakan secara eksplisit.
+
+#### 15.2.2 Login
+
+- Pengguna terdaftar dapat masuk menggunakan identifier dan password sesuai desain produk.
+- Backend harus memverifikasi kredensial secara aman.
+- Kredensial tidak valid harus menghasilkan error autentikasi generik yang tidak mengungkapkan apakah akun ada.
+- Form login harus menyediakan state loading, sukses, error validasi, dan error autentikasi.
+- Field password harus mendukung show/hide password tanpa mengeksposnya di log atau pesan error.
+- Percobaan login berulang harus tindakan proteksi penyalahgunaan yang wajar, seperti rate limiting bila didukung lingkungan deployment.
+
+#### 15.2.3 Sesi dan Status Autentikasi
+
+- Aplikasi harus membedakan pengguna terautentikasi dan tidak terautentikasi.
+- Endpoint backend yang terlindungi harus memverifikasi autentikasi secara independen.
+- Halaman frontend yang terlindungi harus mengarahkan pengguna tidak terautentikasi ke halaman login.
+- Memuat ulang halaman tidak boleh menciptakan status autentikasi yang tidak konsisten.
+- Strategi sesi atau token yang dipilih harus terdokumentasi.
+- Jika autentikasi berbasis cookie digunakan, pengaturan keamanan cookie dan proteksi CSRF harus ditangani secara tepat.
+- Jika bearer token digunakan, masa berlaku token, penyimpanan, pembaruan, dan perilaku logout harus didefinisikan. Token autentikasi jangka panjang tidak boleh disimpan di browser storage yang tidak aman tanpa asesmen keamanan eksplisit.
+
+#### 15.2.4 Logout
+
+- Pengguna terautentikasi dapat keluar.
+- Setelah logout, frontend harus menghapus status autentikasi.
+- Backend harus membatalkan sesi atau mekanisme refresh-token yang berlaku.
+- Pengguna tidak lagi dapat mengakses resource terlindungi menggunakan kredensial yang dibatalkan.
+- Aplikasi harus menyediakan navigasi yang jelas setelah logout.
+
+#### 15.2.5 Integrasi Profil Pengguna
+
+- Aplikasi harus menyediakan identitas pengguna terautentikasi yang stabil.
+- Data khusus pengguna harus terkait dengan identitas backend pengguna terautentikasi.
+- Pengguna tidak boleh dapat membaca atau mengubah data privat pengguna lain dengan mengubah identifier di sisi klien.
+- Field profil tambahan harus mengikuti spesifikasi produk yang ada dan tidak boleh mengarang requirement wajib baru.
+
+### 15.3 Kebutuhan Keamanan
+
+- Password di-hash menggunakan algoritma password-hashing yang sesuai dan parameter yang aman.
+- Autentikasi dan otorisasi harus diterapkan di backend.
+- Secrets, password, dan token tidak boleh di-commit ke repository atau ditulis ke log aplikasi.
+- Konfigurasi dan secrets harus disediakan melalui environment variable atau mekanisme secrets-management yang disetujui.
+- Error autentikasi tidak boleh mengekspos detail implementasi sensitif.
+- Validasi input harus dilakukan di backend, bahkan jika validasi frontend yang ekuisten sudah ada.
+- Operasi database harus menggunakan parameterized query yang aman atau ORM yang ada.
+- Endpoint autentikasi dan endpoint terlindungi harus memiliki automated tests.
+- Implementasi harus mengikuti konvensi keamanan dan coding proyek yang ada.
+
+### 15.4 Minimum Viable Product (MVP)
+
+MVP autentikasi mencakup:
+
+1. Pendaftaran dengan validasi backend.
+2. Login dengan verifikasi kredensial.
+3. Hashing password yang aman.
+4. Strategi sesi atau token yang terdokumentasi.
+5. Penanganan status autentikasi di frontend.
+6. Perlindungan setidaknya satu route atau API endpoint terwakili yang terautentikasi.
+7. Logout dan invalidasi kredensial yang sesuai.
+8. Automated tests untuk alur autentikasi berhasil dan tidak berhasil.
+
+Password reset, verifikasi email, social login, multi-factor authentication, dan manajemen role administratif berada di luar MVP kecuali diperlukan di tempat lain dalam spesifikasi yang ada.
+
+### 15.5 Acceptance Criteria
+
+- Seorang pengguna dapat mendaftar dengan data yang valid.
+- Data pendaftaran tidak valid ditolak dengan error yang dapat dipahami.
+- Akun ganda ditolak sesuai identifier unik yang didefinisikan.
+- Password tidak disimpan dalam plaintext.
+- Seorang pengguna dapat masuk dengan kredensial yang valid.
+- Kredensial tidak valid tidak mengungkapkan apakah akun ada.
+- Request tidak terautentikasi ke endpoint backend terlindungi ditolak.
+- Request terautentikasi dapat mengakses resource terlindungi yang diizinkan.
+- Logout menghapus status autentikasi klien dan membatalkan sesi atau kredensial refresh yang relevan jika berlaku.
+- Status autentikasi berperilaku konsisten setelah refresh halaman sesuai strategi yang dipilih.
+- Automated tests mencakup pendaftaran dan login berhasil, kredensial tidak valid, pendaftaran ganda, akses terlindungi, dan logout.
+- Secrets autentikasi tidak di-hardcode di source code.
+
+### 15.6 Batasan Teknis
+
+- Frontend: React, Vite, dan TypeScript.
+- Backend: Python dan FastAPI.
+- Database: PostgreSQL dengan setup SQLAlchemy dan Alembic yang ada.
+- Testing: gunakan pytest dan konvensi testing frontend yang ada.
+- Perubahan skema database harus dikelola melalui migrasi Alembic.
+- Implementasi harus memanfaatkan arsitektur dan UI design yang ada.
+- Strategi autentikasi yang tepat harus dipilih setelah menginspeksi codebase dan kebutuhan deployment yang ada. Jangan mengimplementasikan lebih dari satu strategi autentikasi yang saling bersaing.
+
+## 16. Riwayat Versi
 
 | Versi | Perubahan |
 |---|---|
+| 1.3-draft | Menambahkan spesifikasi autentikasi dan manajemen akun pengguna (§15) |
 | 1.2-draft | Menyesuaikan kebutuhan dengan wireframe PDF dan memprioritaskan materi serta praktik |

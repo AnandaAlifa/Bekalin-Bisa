@@ -657,6 +657,257 @@ Setiap fitur tambahan harus dibuat sebagai issue terpisah dengan acceptance crit
 
 ---
 
+# PHASE 6 — Authentication
+
+Fitur autentikasi berikut dikerjakan sesuai `spec.md` §15. Setiap task harus diselesaikan berdasarkan dependensinya.
+
+## AUTH-001 — Define Authentication Architecture
+
+**Labels:** `auth`, `architecture`, `priority:high`
+**Priority:** P0
+**Dependencies:** Repository and specification audit
+
+### Objective
+
+Define a secure authentication flow that fits the existing PINTARA architecture.
+
+### Scope
+
+- Inspect the existing frontend, backend, database models, and routing.
+- Decide the authentication strategy and document its lifecycle.
+- Define registration and login request/response contracts.
+- Define authentication error handling and protected-route behavior.
+- Identify required environment variables and database changes.
+
+### Acceptance Criteria
+
+- [ ] The authentication strategy is documented.
+- [ ] API contracts and authentication states are defined.
+- [ ] Security considerations and environment configuration are documented.
+- [ ] Existing architecture is reused where appropriate.
+- [ ] No conflicting authentication implementation is introduced.
+
+### Dependencies
+
+Repository and specification audit.
+
+---
+
+## AUTH-002 — Implement User Model and Database Migration
+
+**Labels:** `auth`, `backend`, `database`, `priority:high`
+**Priority:** P0
+**Dependencies:** AUTH-001
+
+### Objective
+
+Provide persistent user records for authentication.
+
+### Scope
+
+- Implement or adapt the user model.
+- Define the unique account identifier.
+- Store password hashes, never plaintext passwords.
+- Add database constraints and required indexes.
+- Create an Alembic migration.
+
+### Acceptance Criteria
+
+- [ ] The user model follows existing SQLAlchemy conventions.
+- [ ] Duplicate identifiers are prevented by database constraints.
+- [ ] The migration can be applied successfully.
+- [ ] Existing data and unrelated schema are preserved.
+- [ ] Model and migration tests pass.
+
+### Dependencies
+
+`AUTH-001`.
+
+---
+
+## AUTH-003 — Implement Registration API
+
+**Labels:** `auth`, `backend`, `api`, `priority:high`
+**Priority:** P0
+**Dependencies:** AUTH-001, AUTH-002
+
+### Objective
+
+Allow users to create accounts securely.
+
+### Scope
+
+- Implement the registration endpoint using FastAPI.
+- Validate request data with the existing Pydantic conventions.
+- Hash passwords securely.
+- Handle duplicate accounts and invalid input.
+- Return safe, documented responses.
+
+### Acceptance Criteria
+
+- [ ] Valid registration creates a user.
+- [ ] Invalid data is rejected.
+- [ ] Duplicate accounts are rejected.
+- [ ] Plaintext passwords are never persisted.
+- [ ] Error responses do not expose secrets or stack traces.
+- [ ] Automated endpoint tests pass.
+
+### Dependencies
+
+`AUTH-001`, `AUTH-002`.
+
+---
+
+## AUTH-004 — Implement Login and Session Management API
+
+**Labels:** `auth`, `backend`, `api`, `priority:high`
+**Priority:** P0
+**Dependencies:** AUTH-001, AUTH-002
+
+### Objective
+
+Authenticate registered users and maintain authentication state securely.
+
+### Scope
+
+- Implement credential verification.
+- Apply the selected session or token strategy.
+- Define credential expiration and renewal behavior where applicable.
+- Implement logout or session invalidation.
+- Protect a representative authenticated endpoint.
+- Apply appropriate abuse protection where supported.
+
+### Acceptance Criteria
+
+- [ ] Valid credentials authenticate the user.
+- [ ] Invalid credentials are rejected with a generic error.
+- [ ] Protected endpoints reject unauthenticated requests.
+- [ ] Logout invalidates the relevant session or refresh credentials where applicable.
+- [ ] Authentication behavior follows the documented strategy.
+- [ ] Automated tests pass.
+
+### Dependencies
+
+`AUTH-001`, `AUTH-002`.
+
+---
+
+## AUTH-005 — Build Login and Registration UI
+
+**Labels:** `auth`, `frontend`, `ui`, `priority:high`
+**Priority:** P0
+**Dependencies:** AUTH-001
+
+### Objective
+
+Implement authentication screens consistent with PINTARA's design system.
+
+### Scope
+
+- Implement registration and login forms.
+- Reuse existing form components and visual conventions.
+- Add frontend validation that complements backend validation.
+- Add loading, success, validation-error, and authentication-error states.
+- Support password visibility controls.
+- Ensure responsive and accessible form behavior.
+
+### Acceptance Criteria
+
+- [ ] Both forms follow the existing design specification.
+- [ ] Forms submit to the correct backend endpoints.
+- [ ] Users receive understandable feedback.
+- [ ] Repeated submission is handled appropriately while a request is pending.
+- [ ] Layout works on mobile, tablet, and desktop.
+- [ ] Relevant frontend tests pass.
+
+### Dependencies
+
+`AUTH-001`.
+
+---
+
+## AUTH-006 — Integrate Authentication State and Route Protection
+
+**Labels:** `auth`, `frontend`, `integration`, `priority:high`
+**Priority:** P0
+**Dependencies:** AUTH-004, AUTH-005
+
+### Objective
+
+Integrate authentication into application navigation and protected features.
+
+### Scope
+
+- Implement a shared authentication-state mechanism consistent with the chosen strategy.
+- Handle page refresh and authentication initialization.
+- Protect frontend routes that require an account.
+- Provide login navigation or redirects for unauthenticated users.
+- Integrate logout into the existing navigation.
+- Verify backend authorization independently of frontend route guards.
+
+### Acceptance Criteria
+
+- [ ] Authentication state is consistent across relevant pages.
+- [ ] Unauthenticated users cannot use protected backend resources.
+- [ ] Authenticated users can access permitted protected pages.
+- [ ] Logout updates the UI and relevant backend credentials.
+- [ ] Client-side route protection is not treated as the sole security control.
+- [ ] Relevant integration tests pass.
+
+### Dependencies
+
+`AUTH-004`, `AUTH-005`.
+
+---
+
+## AUTH-007 — Authentication Security and End-to-End Tests
+
+**Labels:** `auth`, `testing`, `security`, `priority:high`
+**Priority:** P0
+**Dependencies:** AUTH-003, AUTH-004, AUTH-006
+
+### Objective
+
+Verify the complete authentication lifecycle.
+
+### Scope
+
+- Test registration, duplicate accounts, login, invalid credentials, protected access, and logout.
+- Test validation and error states.
+- Verify password-hashing behavior.
+- Verify authentication behavior after page refresh.
+- Review secret handling, logs, and configuration.
+- Update documentation and `.env.example` if required.
+
+### Acceptance Criteria
+
+- [ ] Required backend and frontend tests pass.
+- [ ] Critical authentication flows are tested end to end.
+- [ ] Secrets are not hardcoded or logged.
+- [ ] Setup instructions explain the required environment variables.
+- [ ] Known limitations are documented.
+- [ ] The implementation is reviewed against `build/spec.md`, `build/design.md`, and `AGENTS.md`.
+
+### Dependencies
+
+`AUTH-003`, `AUTH-004`, `AUTH-006`.
+
+---
+
+### Recommended Execution Order (Authentication)
+
+1. AUTH-001 — Define architecture.
+2. AUTH-002 — User model and migration.
+3. AUTH-003 — Registration API.
+4. AUTH-004 — Login and session management.
+5. AUTH-005 — Login and registration UI.
+6. AUTH-006 — Authentication state and route protection.
+7. AUTH-007 — Security and end-to-end tests.
+
+**Implementation rule:** Inspect the current repository and backlog before starting. Reuse existing authentication components if present, preserve existing task IDs, and do not mark a task complete until its acceptance criteria and tests have been verified.
+
+---
+
 # Global Definition of Done
 
 Sebuah issue dapat ditutup jika:
