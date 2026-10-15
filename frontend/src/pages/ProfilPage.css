@@ -1,0 +1,53 @@
+.profil-page {
+  width: min(100% - 2rem, 48rem);
+}
+
+.profil-card {
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .profil-card {
+    padding: 2rem;
+  }
+}
+
+.profil-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-slate-100);
+}
+
+.profil-name {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-indigo-900);
+  margin: 0;
+}
+
+.profil-meta {
+  font-size: 0.875rem;
+  color: var(--color-slate-500);
+  margin: 0;
+}
+
+.profil-role {
+  color: var(--color-pink-600);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.profil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profil-submit {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 0.875rem;
+}

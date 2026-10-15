@@ -102,3 +102,9 @@
   font-size: 0.7rem;
   color: var(--color-slate-500);
 }
+
+.app-header__role-highlight {
+  color: var(--color-pink-600);
+  font-weight: 700;
+  text-transform: capitalize;
+}

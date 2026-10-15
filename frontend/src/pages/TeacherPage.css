@@ -1,0 +1,59 @@
+.teacher-page {
+  width: min(100% - 2rem, 64rem);
+}
+
+.teacher-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .teacher-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.teacher-header__sub {
+  margin: 0.25rem 0 0;
+}
+
+.teacher-header__cta {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.teacher-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .teacher-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.teacher-card__title {
+  font-size: 1.125rem;
+  font-weight: 900;
+  color: var(--color-indigo-900);
+  margin: 0 0 0.5rem;
+}
+
+.teacher-card__desc {
+  font-size: 0.75rem;
+  color: var(--color-slate-500);
+  margin: 0 0 1rem;
+}
+
+.teacher-card__cta {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+}

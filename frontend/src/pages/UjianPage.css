@@ -1,0 +1,248 @@
+.ujian-page {
+  width: min(100% - 2rem, 64rem);
+}
+
+.ujian-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .ujian-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ujian-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ujian-card__title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--color-indigo-900);
+  margin: 0.75rem 0 0.25rem;
+}
+
+.ujian-card__meta {
+  font-size: 0.875rem;
+  color: var(--color-slate-500);
+  margin: 0 0 1rem;
+}
+
+.ujian-card__cta {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Active exam */
+.ujian-active {
+  width: min(100% - 2rem, 48rem);
+}
+
+.ujian-active__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ujian-badge-locked {
+  display: inline-block;
+  font-size: 0.75rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid #fecaca;
+}
+
+.ujian-active__title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--color-indigo-900);
+  margin: 0.5rem 0 0;
+}
+
+.ujian-active__timer {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ujian-active__timer-label {
+  font-size: 0.75rem;
+  color: var(--color-slate-500);
+  font-weight: 700;
+  margin: 0;
+}
+
+.ujian-active__timer-value {
+  font-size: 1.125rem;
+  font-weight: 900;
+  color: var(--color-error);
+  margin: 0;
+}
+
+.ujian-question {
+  padding: 2rem;
+}
+
+.ujian-question__number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-pink-600);
+}
+
+.ujian-question__text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-slate-800);
+  margin: 0.5rem 0 1.5rem;
+}
+
+.ujian-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ujian-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-slate-300);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ujian-option:hover {
+  border-color: var(--color-pink);
+  background: rgba(253, 242, 248, 0.3);
+}
+
+.ujian-option--selected {
+  border-color: var(--color-pink-600);
+  background: var(--color-pink-50);
+}
+
+.ujian-option__radio {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-pink-600);
+}
+
+.ujian-option__text {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-slate-700);
+}
+
+.ujian-question__actions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 2px solid var(--color-slate-100);
+  margin-top: 1.5rem;
+}
+
+.ujian-exit-btn {
+  padding: 0.625rem 1.5rem;
+  background: var(--color-slate-200);
+  color: var(--color-slate-700);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.15s ease;
+}
+
+.ujian-exit-btn:hover {
+  background: var(--color-slate-300);
+}
+
+.ujian-submit {
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+}
+
+/* Lockdown overlay */
+.exam-lockdown {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(69, 10, 10, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.exam-lockdown__card {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 32rem;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  border: 4px solid #ef4444;
+}
+
+.exam-lockdown__icon {
+  width: 5rem;
+  height: 5rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.25rem;
+  margin: 0 auto 1rem;
+  animation: labPulse 1s ease-in-out infinite;
+}
+
+.exam-lockdown__title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-slate-900);
+  margin: 0 0 0.5rem;
+}
+
+.exam-lockdown__msg {
+  color: var(--color-slate-600);
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem;
+  line-height: 1.625;
+}
+
+.exam-lockdown__report {
+  width: 100%;
+  background: var(--color-slate-900);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.875rem;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: background 0.15s ease;
+}
+
+.exam-lockdown__report:hover {
+  background: var(--color-slate-800);
+}

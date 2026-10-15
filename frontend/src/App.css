@@ -22,4 +22,46 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  padding: 1rem;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 640px) {
+  .app-shell__main {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-shell__main {
+    padding: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.app-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: var(--color-slate-50);
+  color: var(--color-slate-600);
+  font-weight: 700;
+}
+
+.app-loading__spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--color-indigo-100);
+  border-top-color: var(--color-indigo-600);
+  border-radius: 50%;
+  animation: appSpin 0.8s linear infinite;
+}
+
+@keyframes appSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }

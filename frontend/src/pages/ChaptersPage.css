@@ -1,0 +1,44 @@
+.chapters-page {
+  width: min(100% - 2rem, 56rem);
+}
+
+.chapters-header {
+  margin-bottom: 1.5rem;
+}
+
+.chapters-header__desc {
+  color: var(--color-slate-600);
+  margin: 0.5rem 0 0;
+}
+
+.chapters-body__heading {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-slate-800);
+  margin: 0 0 1rem;
+}
+
+.chapters-note {
+  background: var(--color-slate-100);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-slate-300);
+  margin-top: 2rem;
+}
+
+.chapters-note__heading {
+  font-weight: 900;
+  color: var(--color-slate-800);
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.chapters-note__textarea {
+  margin-bottom: 0.75rem;
+  background: #ffffff;
+}
+
+.chapters-note__save {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.75rem;
+}

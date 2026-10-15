@@ -178,6 +178,44 @@ a {
   outline-offset: 2px;
 }
 
+/* --- Bekalin Button (reference exact) --- */
+
+.bekalin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-pink);
+  color: #ffffff;
+  font-weight: 700;
+  border: 2px solid var(--color-pink-700);
+  border-radius: var(--radius-md);
+  box-shadow: 3px 3px 0px var(--color-pink-800);
+  transition: all 0.2s var(--ease-cinematic);
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+.bekalin-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 6px 0px var(--color-pink-800);
+}
+
+.bekalin-button:active {
+  transform: translateY(1px);
+  box-shadow: 1px 2px 0px var(--color-pink-800);
+}
+
+.bekalin-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.bekalin-button:focus-visible {
+  outline: 3px solid var(--color-indigo-600);
+  outline-offset: 2px;
+}
+
 /* --- Badge / pill --- */
 
 .badge {

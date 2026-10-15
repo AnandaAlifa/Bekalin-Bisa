@@ -1,0 +1,59 @@
+.admin-page {
+  width: min(100% - 2rem, 64rem);
+}
+
+.admin-card__title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--color-indigo-900);
+  margin: 0 0 1rem;
+}
+
+.admin-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid #a5b4fc;
+  background: var(--color-indigo-100);
+  color: var(--color-indigo-900);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .admin-status {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.admin-status__mode {
+  font-weight: 900;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.admin-status__mode-value {
+  text-transform: uppercase;
+}
+
+.admin-status__desc {
+  font-size: 0.75rem;
+  color: var(--color-indigo-700);
+  margin: 0.125rem 0 0;
+}
+
+.admin-status__badge {
+  padding: 0.375rem 1rem;
+  background: var(--color-pink-600);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-pink-800);
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  align-self: flex-start;
+}
