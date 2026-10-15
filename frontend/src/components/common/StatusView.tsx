@@ -20,7 +20,7 @@ export default function StatusView({
 }: StatusViewProps) {
   if (isLoading) {
     return (
-      <div className="status-view status-view--loading" role="status">
+      <div className="status-view status-view--loading animate-fade-in" role="status">
         Memuat…
       </div>
     );
@@ -28,7 +28,7 @@ export default function StatusView({
 
   if (error) {
     return (
-      <div className="status-view status-view--error" role="alert">
+      <div className="status-view status-view--error animate-pop-in" role="alert">
         <p>{error}</p>
         {onRetry && (
           <button type="button" className="status-view__button" onClick={onRetry}>
@@ -41,7 +41,7 @@ export default function StatusView({
 
   if (isEmpty) {
     return (
-      <div className="status-view status-view--empty" role="status">
+      <div className="status-view status-view--empty animate-fade-in" role="status">
         <p>{emptyMessage}</p>
       </div>
     );

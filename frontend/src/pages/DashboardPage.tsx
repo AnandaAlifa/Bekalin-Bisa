@@ -1,27 +1,33 @@
 import { Link } from 'react-router-dom';
-import Avatar from '../components/common/Avatar';
 import './DashboardPage.css';
 
 export default function DashboardPage() {
   return (
     <div className="page-container dashboard-page">
-      <div className="dashboard-hero panel">
-        <Avatar size={56} withCamera />
+      <section className="dashboard-hero bekalin-box animate-pop-in">
         <div className="dashboard-hero__text">
           <h1 className="page-title">Selamat datang di PINTARA</h1>
           <p className="page-subtitle">
             Mulai dari materi belajar, lalu uji pemahamanmu lewat latihan soal.
           </p>
         </div>
-      </div>
+        <span className="badge badge--pink">Belajar, Bertumbuh, Berprestasi</span>
+      </section>
 
       <div className="dashboard-grid">
-        <section className="dashboard-card panel">
-          <h2 className="dashboard-card__title">Materi</h2>
-          <div className="dashboard-card__preview blue-overlay" aria-hidden="true">
-            <span className="dashboard-card__preview-line" />
-            <span className="dashboard-card__preview-line dashboard-card__preview-line--short" />
+        <section className="dashboard-card bekalin-box animate-pop-in stagger-1">
+          <div className="dashboard-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+              <path
+                d="M4 4h7a3 3 0 013 3v14a2.5 2.5 0 00-2.5-2.5H4V4zm16 0h-7a3 3 0 00-3 3v14a2.5 2.5 0 012.5-2.5H20V4z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
+          <h2 className="dashboard-card__title">Materi</h2>
           <p className="dashboard-card__description">
             Jelajahi mata pelajaran, bab, dan subbab. Setiap materi dilengkapi
             isi belajar dan catatan penting.
@@ -31,12 +37,19 @@ export default function DashboardPage() {
           </Link>
         </section>
 
-        <section className="dashboard-card panel">
-          <h2 className="dashboard-card__title">Praktik</h2>
-          <div className="dashboard-card__preview magenta-bar" aria-hidden="true">
-            <span className="dashboard-card__preview-line" />
-            <span className="dashboard-card__preview-line dashboard-card__preview-line--short" />
+        <section className="dashboard-card bekalin-box animate-pop-in stagger-2">
+          <div className="dashboard-card__icon dashboard-card__icon--pink" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+              <path
+                d="M9 3h6M10 3v6.5L4.5 19a2 2 0 001.8 3h11.4a2 2 0 001.8-3L14 9.5V3"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
+          <h2 className="dashboard-card__title">Praktik</h2>
           <p className="dashboard-card__description">
             Kerjakan latihan pilihan ganda. Nilai dihitung oleh backend dan hasil
             tersimpan setiap kali kamu mengirim jawaban.

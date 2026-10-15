@@ -1,38 +1,36 @@
-import { NavLink } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Avatar from '../common/Avatar';
 import './AppHeader.css';
 
-const NAV_ITEMS = [
-  { to: '/', label: 'Dashboard', end: true },
-  { to: '/subjects', label: 'Materi', end: false },
-  { to: '/lessons/1/practice', label: 'Praktik', end: false },
-];
-
 export default function AppHeader() {
+  const navigate = useNavigate();
+
   return (
     <header className="app-header">
-      <div className="page-container app-header__inner">
-        <NavLink className="app-header__brand" to="/">
-          PINTARA
-        </NavLink>
-        <span className="app-header__tagline">Belajar, Bertumbuh, Berprestasi</span>
-        <nav className="app-header__nav" aria-label="Navigasi utama">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                `app-header__link${isActive ? ' app-header__link--active' : ''}`
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-        <span className="app-header__avatar">
-          <Avatar size={32} />
-        </span>
+      <div className="app-header__inner">
+        <Link to="/" className="app-header__brand">
+          <span className="app-header__brand-icon" aria-hidden="true">
+            P
+          </span>
+          <span className="app-header__brand-text">
+            PIN<span className="app-header__brand-accent">TARA</span>
+          </span>
+        </Link>
+
+        <span className="app-header__badge badge badge--pink">Platform Pembelajaran</span>
+
+        <button
+          type="button"
+          className="app-header__profile"
+          onClick={() => navigate('/subjects')}
+          aria-label="Buka profil / materi"
+        >
+          <span className="app-header__profile-text">
+            <span className="app-header__profile-name">Siswa</span>
+            <span className="app-header__profile-role">Belajar, Bertumbuh, Berprestasi</span>
+          </span>
+          <Avatar name="Siswa" size={40} />
+        </button>
       </div>
     </header>
   );

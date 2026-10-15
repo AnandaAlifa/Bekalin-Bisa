@@ -12,14 +12,14 @@ interface ChapterListProps {
 export default function ChapterList({ chapters }: ChapterListProps) {
   return (
     <ol className="chapter-list">
-      {chapters.map((chapter) => (
-        <ChapterItem key={chapter.id} chapter={chapter} />
+      {chapters.map((chapter, index) => (
+        <ChapterItem key={chapter.id} chapter={chapter} index={index} />
       ))}
     </ol>
   );
 }
 
-function ChapterItem({ chapter }: { chapter: Chapter }) {
+function ChapterItem({ chapter, index }: { chapter: Chapter; index: number }) {
   const [lessons, setLessons] = useState<LessonListItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +45,9 @@ function ChapterItem({ chapter }: { chapter: Chapter }) {
   }, [chapter.id, reloadKey]);
 
   return (
-    <li className="chapter-item">
+    <li
+      className={`chapter-item bekalin-box animate-pop-in stagger-${(index % 5) + 1}`}
+    >
       <h2 className="chapter-item__title">
         Bab {chapter.sort_order}: {chapter.title}
       </h2>

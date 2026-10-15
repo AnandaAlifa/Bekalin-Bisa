@@ -2,12 +2,13 @@
   display: flex;
   position: sticky;
   bottom: 0;
-  z-index: 50;
-  background: var(--color-purple-soft);
-  border-top: 2px solid var(--color-purple);
-  padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  background: #ffffff;
+  border-top: 2px solid var(--color-indigo);
+  padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
   gap: 0.25rem;
   justify-content: space-around;
+  box-shadow: 0 -2px 8px rgb(87 70 216 / 0.08);
 }
 
 .app-bottom-nav__item {
@@ -16,30 +17,30 @@
   align-items: center;
   gap: 0.15rem;
   min-width: 64px;
-  padding: 0.3rem 0.5rem;
-  border-radius: var(--radius-sm);
-  color: rgb(255 255 255 / 0.75);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-md);
+  color: var(--color-slate-500);
   text-decoration: none;
   font-size: 0.7rem;
   font-weight: 600;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .app-bottom-nav__item:hover,
 .app-bottom-nav__item:focus-visible {
-  color: #fff;
+  color: var(--color-pink);
   text-decoration: none;
 }
 
 .app-bottom-nav__item:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-pink);
   outline-offset: 1px;
 }
 
 .app-bottom-nav__item--active {
-  color: #fff;
-  background: rgb(255 0 238 / 0.35);
-  outline: 1px solid var(--color-accent);
+  color: var(--color-pink);
+  font-weight: 900;
+  transform: scale(1.05);
 }
 
 .app-bottom-nav__icon {

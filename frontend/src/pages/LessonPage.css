@@ -1,41 +1,44 @@
 .lesson-panel {
   padding: var(--space-3);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-indigo);
+  background: #ffffff;
+  box-shadow: var(--shadow-hard);
+  color: var(--color-slate-800);
 }
 
 .lesson-panel .page-title {
-  color: var(--color-text);
+  color: var(--color-indigo-900);
 }
 
 .lesson-panel__content {
   white-space: pre-wrap;
   font-size: 1.05rem;
   max-width: 65ch;
-  color: var(--color-text);
+  color: var(--color-slate-700);
   margin-top: var(--space-2);
-  padding: var(--space-2);
-  background: rgb(21 121 215 / 0.12);
-  border: 1px solid rgb(17 0 255 / 0.25);
-  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--color-indigo-100);
+  border: 2px solid var(--color-indigo-600);
+  border-radius: var(--radius-md);
 }
 
 .lesson-panel__note {
   margin-top: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  background: var(--color-lavender);
-  border-left: 4px solid var(--color-purple-soft);
-  color: var(--color-text);
+  border-radius: var(--radius-md);
+  background: var(--color-pink-50);
+  border: 2px solid #f9a8d4;
+  color: var(--color-slate-800);
 }
 
 .lesson-panel__note-title {
   margin: 0 0 var(--space-1);
-  font-size: 0.95rem;
-  letter-spacing: 0.08em;
-  color: var(--color-purple);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--color-pink-700);
 }
 
 .lesson-panel__note p {

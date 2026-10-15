@@ -2,15 +2,15 @@ import { NavLink } from 'react-router-dom';
 import './AppBottomNav.css';
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Home', icon: 'home' },
-  { to: '/subjects', label: 'Materi', icon: 'book' },
-  { to: '/lessons/1/practice', label: 'Praktik', icon: 'quiz' },
+  { to: '/', label: 'Home', icon: 'home', end: true },
+  { to: '/subjects', label: 'Materi', icon: 'book', end: false },
+  { to: '/lessons/1/practice', label: 'Praktik', icon: 'flask', end: false },
 ];
 
 const ICON_PATHS: Record<string, string> = {
   home: 'M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1V10.5z',
   book: 'M4 4h7a3 3 0 013 3v14a2.5 2.5 0 00-2.5-2.5H4V4zm16 0h-7a3 3 0 00-3 3v14a2.5 2.5 0 012.5-2.5H20V4z',
-  quiz: 'M4 4h16a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1zm3 4h10M7 12h6m-6 4h8',
+  flask: 'M9 3h6M10 3v6.5L4.5 19a2 2 0 001.8 3h11.4a2 2 0 001.8-3L14 9.5V3',
 };
 
 export default function AppBottomNav() {
@@ -20,7 +20,7 @@ export default function AppBottomNav() {
         <NavLink
           key={item.to}
           to={item.to}
-          end={item.to === '/'}
+          end={item.end}
           className={({ isActive }) =>
             `app-bottom-nav__item${isActive ? ' app-bottom-nav__item--active' : ''}`
           }

@@ -33,8 +33,12 @@ export default function SubjectsPage() {
 
   return (
     <div className="page-container">
-      <h1 className="page-title">Mata Pelajaran</h1>
-      <p className="page-subtitle">Pilih mata pelajaran untuk mulai belajar.</p>
+      <div className="bekalin-box animate-pop-in" style={{ marginBottom: '1.5rem' }}>
+        <h1 className="page-title">Mata Pelajaran</h1>
+        <p className="page-subtitle" style={{ marginBottom: 0 }}>
+          Pilih mata pelajaran untuk mulai belajar.
+        </p>
+      </div>
       <StatusView
         isLoading={isLoading}
         error={error}

@@ -45,10 +45,12 @@ export default function ChaptersPage() {
       <Link className="back-link" to="/subjects">
         ← Kembali ke mata pelajaran
       </Link>
-      <h1 className="page-title">Daftar Bab</h1>
-      <p className="page-subtitle">
-        Pilih subbab untuk membaca materi dan membuka latihan.
-      </p>
+      <div className="bekalin-box animate-pop-in" style={{ marginBottom: '1.5rem' }}>
+        <h1 className="page-title">Daftar Bab</h1>
+        <p className="page-subtitle" style={{ marginBottom: 0 }}>
+          Pilih subbab untuk membaca materi dan membuka latihan.
+        </p>
+      </div>
       <StatusView
         isLoading={isLoading}
         error={error}

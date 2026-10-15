@@ -1,23 +1,25 @@
 .app-footer {
   margin-top: auto;
-  background: #141414;
+  background: var(--color-indigo-950);
   color: rgb(255 255 255 / 0.85);
   padding-block: var(--space-3);
-  border-top: 1px solid rgb(255 255 255 / 0.08);
+  border-top: 2px solid var(--color-indigo-800);
 }
 
 .app-footer__inner {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding-block: 0;
+  width: min(100% - 2rem, 1280px);
+  margin-inline: auto;
 }
 
 .app-footer__brand {
   margin: 0;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #fff;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  font-size: 1.1rem;
 }
 
 .app-footer__tagline {
