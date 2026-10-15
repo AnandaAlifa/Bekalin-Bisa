@@ -2,28 +2,44 @@ import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
+import { ApiError } from '../../services/api';
+import { apiLogin, saveAccessToken } from '../../services/auth';
 import './AuthPages.css';
 
 export default function LoginPage() {
-  const { user, login } = useAuth();
+  const { user, login, loginWithBackendUser } = useAuth();
   const { showNotification } = useNotification();
   const navigate = useNavigate();
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (user) return <Navigate to="/" replace />;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const ok = login(id, pass);
-    if (ok) {
+    if (isSubmitting) return;
+    if (pass.length < 8) {
+      showNotification('Validasi Sandi', 'Kata sandi minimal 8 karakter.', 'error');
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const result = await apiLogin(email.trim(), pass);
+      saveAccessToken(result.access_token);
+      loginWithBackendUser(result.user);
       navigate('/');
-    } else {
-      showNotification(
-        'Gagal Masuk',
-        'Email/username atau kata sandi yang Anda masukkan salah.',
-        'error',
-      );
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401 && login(email.trim(), pass)) {
+        navigate('/');
+        return;
+      }
+      const message =
+        err instanceof ApiError ? err.message : 'Terjadi kesalahan tak terduga. Coba lagi.';
+      showNotification('Gagal Masuk', message, 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -39,42 +55,63 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit} aria-busy={isSubmitting}>
           <div>
-            <label className="form-label" htmlFor="login-id">
-              Email / Username
+            <label className="form-label" htmlFor="login-email">
+              Email
             </label>
             <input
-              id="login-id"
-              type="text"
+              id="login-email"
+              type="email"
               required
+              autoComplete="email"
               placeholder="contoh: budi@student.sch.id"
               className="form-input"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isSubmitting}
             />
           </div>
           <div>
             <label className="form-label" htmlFor="login-pass">
               Kata Sandi
             </label>
-            <input
-              id="login-pass"
-              type="password"
-              required
-              placeholder="••••••••"
-              className="form-input"
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
-            />
+            <div className="auth-password">
+              <input
+                id="login-pass"
+                type={showPass ? 'text' : 'password'}
+                required
+                minLength={8}
+                autoComplete="current-password"
+                placeholder="••••••••"
+                className="form-input"
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+                disabled={isSubmitting}
+              />
+              <button
+                type="button"
+                className="auth-password__toggle"
+                onClick={() => setShowPass((v) => !v)}
+                aria-label={showPass ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                aria-pressed={showPass}
+                disabled={isSubmitting}
+              >
+                <i className={showPass ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'} aria-hidden="true" />
+              </button>
+            </div>
             <div className="auth-link-right">
               <Link to="/forgot" className="auth-link">
                 Lupa Kata Sandi?
               </Link>
             </div>
           </div>
-          <button type="submit" className="bekalin-button auth-submit">
-            LOGIN
+          <button
+            type="submit"
+            className="bekalin-button auth-submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'MEMPROSES…' : 'LOGIN'}
           </button>
         </form>
 

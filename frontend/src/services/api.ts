@@ -57,6 +57,15 @@ async function toApiError(response: Response): Promise<ApiError> {
     const body = (await response.json()) as { detail?: unknown };
     if (body && typeof body.detail === 'string' && body.detail) {
       detail = body.detail;
+    } else if (body && Array.isArray(body.detail)) {
+      const messages = body.detail
+        .map((item) =>
+          item && typeof item === 'object' && 'msg' in item ? String((item as { msg: unknown }).msg) : '',
+        )
+        .filter(Boolean);
+      if (messages.length > 0) {
+        detail = messages.join('; ');
+      }
     }
   } catch {
     // respons bukan JSON — pakai pesan default

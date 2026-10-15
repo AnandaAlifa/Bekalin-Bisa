@@ -53,7 +53,7 @@ Berikut fitur yang **sudah berjalan** di kode saat ini:
 
 - **Design system** — palet Indigo/Pink/Slate, font Inter, `.bekalin-box` / `.bekalin-button`, animasi cinematic (fade-in, pop-in, slide) + dukungan `prefers-reduced-motion`.
 - **Layout responsif** — desktop: sidebar + header sticky; mobile: bottom nav 5 item + bottom sheet **Lainnya**.
-- **Auth screens (client-side demo)** — Login, Sign Up (validasi emoji), Lupa Kata Sandi. State disimpan di `localStorage`; **bukan** autentikasi backend (integrasi ke endpoint `/auth/*` dikerjakan di AUTH-005/006).
+- **Auth screens** — Login & Sign Up terhubung backend (`/auth/login`, `/auth/register`) dengan state loading, error validasi/authentikasi, dan toggle tampil sandi; Lupa Kata Sandi masih placeholder. Integrasi sesi penuh (token-based state) menyusul di AUTH-006.
 - **Materi** — grid mata pelajaran dengan icon & kategori, selector kelas, integrasi backend API; halaman detail bab + catatan pribadi (localStorage).
 - **Lab (Praktikin)** — 4 tab simulasi (Fisika, Biologi, Kimia, Astronomi) dengan panel gelap, slider parameter, dan tombol simpan.
 - **Ujian** — daftar ujian, mode ujian aktif (timer + radio jawaban), dan **exam lockdown** (deteksi blur/visibilitychange → overlay blokir).
@@ -256,7 +256,7 @@ Content-Type: application/json
 
 ## Autentikasi (Saat Ini)
 
-> **Status:** autentikasi **backend sudah lengkap** untuk MVP — `POST /auth/register`, `POST /auth/login` (JWT HS256, bcrypt, expiry 60 menit), `POST /auth/logout`, dan `GET /users/me` (terlindungi Bearer token). **Frontend masih memakai demo client-side** (`AuthContext` + `localStorage`) dan belum terhubung ke endpoint tersebut — pengerjaan integrasi FE di issue [#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
+> **Status:** autentikasi **backend lengkap** untuk MVP (`/auth/register`, `/auth/login`, `/auth/logout`, `/users/me` — JWT HS256 + bcrypt). **Form login & signup frontend sudah mengirim ke endpoint backend** (AUTH-005); setelah login berhasil token disimpan di `sessionStorage` dan sesi di-bridge ke `AuthContext`. Sesi token-based penuh (hydrasi `/users/me` saat refresh, proteksi route, logout terintegrasi) dikerjakan di issue [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31)–[#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32).
 >
 > Rincian keputusan arsitektur: [`build/auth-architecture.md`](build/auth-architecture.md) (ADR-001).
 
@@ -272,7 +272,8 @@ Anda juga dapat mendaftar akun baru melalui **Sign Up** — untuk sementara akun
 
 ### Perilaku saat ini
 
-- Login/signup/logout frontend ditangani `frontend/src/contexts/AuthContext.tsx` (demo `localStorage`).
+- Form login mengirim ke `POST /auth/login`; form signup mengirim ke `POST /auth/register` (role selalu `student` di backend).
+- Setelah login backend berhasil, token disimpan di `sessionStorage` dan profil user di-bridge ke `AuthContext` (demo `localStorage` masih dipertahankan untuk akun demo sampai AUTH-006).
 - Route terlindungi diarahkan ke `/login` oleh guard di `App.tsx` (client-side saja).
 - Backend memverifikasi kredensial dan token secara independen (`GET /users/me` menolak tanpa Bearer token yang valid).
 - Role frontend (`student` / `teacher` / `school_admin`) mempengaruhi menu sidebar & bottom sheet; role backend saat ini `student` / `admin` dan **otorisasi per-role belum diterapkan** di endpoint (lihat ADR §8).
@@ -342,15 +343,14 @@ Pilih issue → Implementasi → Verifikasi (test/build) → Review diff → Com
 
 ### Issue terbuka yang direkomendasikan berikutnya
 
-Integrasi frontend autentikasi (dependensi satu sama lain, kerjakan berurutan):
+Integrasi sesi frontend (dependensi satu sama lain, kerjakan berurutan):
 
 | Issue | Task | Judul |
 |---|---|---|
-| [#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30) | AUTH-005 | Build Login and Registration UI |
 | [#31](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/31) | AUTH-006 | Integrate Authentication State and Route Protection |
 | [#32](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/32) | AUTH-007 | Authentication Security and End-to-End Tests |
 
-(AUTH-001–004 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#29](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/29) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
+(AUTH-001–005 / [#26](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/26)–[#30](https://github.com/AnandaAlifa/Bekalin-Bisa/issues/30) sudah selesai — lihat [`build/auth-architecture.md`](build/auth-architecture.md).)
 
 ## Tim
 

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import type { BackendAuthUser } from '../services/auth';
 
 export type UserRole = 'student' | 'teacher' | 'school_admin';
 
@@ -88,24 +89,14 @@ function loadStoredUsers(): Array<{ email: string; pass: string; user: AuthUser 
   }
 }
 
-function saveStoredUsers(users: Array<{ email: string; pass: string; user: AuthUser }>) {
-  try {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  } catch {
-    /* ignore */
-  }
-}
-
 interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
   login: (id: string, pass: string) => boolean;
-  signup: (input: {
-    name: string;
-    email: string;
-    pass: string;
-    className: string;
-  }) => { ok: boolean; error?: string };
+  loginWithBackendUser: (
+    backendUser: BackendAuthUser,
+    extras?: { name?: string; className?: string },
+  ) => void;
   logout: () => void;
   updateUser: (patch: Partial<AuthUser>) => void;
 }
@@ -152,27 +143,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return false;
   }, []);
 
-  const signup = useCallback(
-    (input: { name: string; email: string; pass: string; className: string }) => {
-      const emojiRegex = /(\p{Emoji_Presentation}|\p{Extended_Pictographic})/u;
-      if (emojiRegex.test(input.pass)) {
-        return { ok: false, error: 'Kata sandi tidak boleh mengandung emoji!' };
-      }
-      const newUser: AuthUser = {
-        email: input.email,
-        name: input.name,
-        username: input.email.split('@')[0],
-        role: 'student',
-        schoolName: 'SMA Negeri Mitra',
-        className: input.className,
+  const loginWithBackendUser = useCallback(
+    (backendUser: BackendAuthUser, extras?: { name?: string; className?: string }) => {
+      setUser({
+        email: backendUser.email,
+        name: extras?.name?.trim() || backendUser.username,
+        username: backendUser.username,
+        role: backendUser.role === 'admin' ? 'school_admin' : 'student',
+        schoolName: 'Sekolah',
+        className: extras?.className ?? 'Kelas 11 IPA',
         sourceMode: 'COMPANY_PLUS_SCHOOL',
-        bio: 'Siswa baru terdaftar di Bekalin Bisa.',
-      };
-      const users = loadStoredUsers();
-      users.push({ email: input.email, pass: input.pass, user: newUser });
-      saveStoredUsers(users);
-      setUser(newUser);
-      return { ok: true };
+        bio: backendUser.bio ?? '',
+      });
     },
     [],
   );
@@ -186,8 +168,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, isLoading, login, signup, logout, updateUser }),
-    [user, isLoading, login, signup, logout, updateUser],
+    () => ({ user, isLoading, login, loginWithBackendUser, logout, updateUser }),
+    [user, isLoading, login, loginWithBackendUser, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
