@@ -264,8 +264,6 @@ POST /api/v1/auth/login
 Content-Type: application/json
 
 { "email": "budi@student.sch.id", "password": "siswa123" }
-{ "email": "teacher@student.sch.id", "password": "guru1234" }
-{ "email": "admin@student.sch.id", "password": "admin123" }
 ```
 
 ## Autentikasi
